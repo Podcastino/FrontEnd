@@ -128,7 +128,7 @@ const Signup = () => {
               width: "640px",
               backgroundColor: ContainerColor,
               padding: 4,
-              borderRadius: "25px",
+              borderRadius: "30px",
               boxShadow: 3,
               color: "white",
             }}
@@ -246,6 +246,7 @@ const Signup = () => {
                 backgroundColor: "#26245F",
                 fontSize: "24px",
                 color: "#97A9B2",
+                textTransform: "none",
                 "&:hover": { backgroundColor: "#211D55" },
               }}
             >

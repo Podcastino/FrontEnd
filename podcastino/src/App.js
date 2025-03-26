@@ -4,6 +4,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import { AppBar, Toolbar, Typography, Button, Box } from "@mui/material";
+import ForgetPassword from "./pages/Forget-pass";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/forget-pass" element={<ForgetPassword />} />
         </Routes>
       </Box>
     </Router>
