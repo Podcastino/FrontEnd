@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { Box, Container, Typography, TextField, Button } from "@mui/material";
+import { useNavigate } from 'react-router-dom';
 import pic4 from "../assets/Vector.png";
 import pic1 from "../assets/Vector-2.png";
 import pic2 from "../assets/Vector-1.png";
@@ -27,7 +28,82 @@ const textFieldSx = {
   },
 };
 
-const Signup = () => {
+export default function Signup() {
+  // State variables for each input field and error/success messages.
+  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const navigate = useNavigate();
+
+  // Regular expressions for validation.
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const usernameRegex = /^[a-zA-Z0-9_]{3,}$/;
+  const phoneRegex = /^[0-9+]{7,15}$/; // allows digits and '+' (adjust as needed)
+
+  const handleSignup = async (e) => {
+    e.preventDefault();
+    setError("");
+    setSuccess("");
+
+    // Basic validations.
+    if (!email.trim() || !emailRegex.test(email)) {
+      setError("Please enter a valid email address.");
+      return;
+    }
+    if (!username.trim() || !usernameRegex.test(username)) {
+      setError("Username must be at least 3 characters and contain only letters, numbers, or underscores.");
+      return;
+    }
+    if (!phoneNumber.trim() || !phoneRegex.test(phoneNumber)) {
+      setError("Please enter a valid phone number (digits and optional '+' sign).");
+      return;
+    }
+    if (!password || password.length < 6) {
+      setError("Password must be at least 6 characters long.");
+      return;
+    }
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
+
+    const signupData = {
+      email,
+      username,
+      phone_number: phoneNumber,
+      password,
+      confirm_password: confirmPassword,
+    };
+
+    try {
+      const response = await fetch("http://127.0.0.1:8000/api/register/signup/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(signupData),
+      });
+  
+      if (!response.ok) {
+        throw new Error("Signup failed. Please try again.");
+      }
+  
+      const data = await response.json();
+      console.log("Signup successful:", data);
+      setSuccess("Account created successfully! Please log in.");
+      setTimeout(() => {
+        navigate("/login");
+      }, 2000);
+    } catch (err) {
+      console.error(err);
+      setError(err.message || "Signup failed. Please try again.");
+    }
+  };
+
   return (
     <Box
       sx={{
@@ -133,125 +209,155 @@ const Signup = () => {
               color: "white",
             }}
           >
-            <Box sx={{ textAlign: "left", mb: 2, paddingX: 1 }}>
-              <Typography
-                variant="subtitle1"
-                sx={{ color: TextfieldsColor, fontSize: "20px", fontWeight: 700 }}
-              >
-                Email
-              </Typography>
-              <TextField
-                fullWidth
-                margin="normal"
-                variant="outlined"
-                size="small"
-                InputProps={{
-                  style: { borderRadius: "10px", color: "white" },
-                }}
-                sx={textFieldSx}
-              />
-            </Box>
-            <Box sx={{ textAlign: "left", mb: 2, paddingX: 1 }}>
-              <Typography
-                variant="subtitle1"
-                sx={{ color: TextfieldsColor, fontSize: "20px", fontWeight: 700 }}
-              >
-                Username
-              </Typography>
-              <TextField
-                fullWidth
-                margin="normal"
-                variant="outlined"
-                size="small"
-                InputProps={{
-                  style: { borderRadius: "10px", color: "white" },
-                }}
-                sx={textFieldSx}
-              />
-            </Box>
-            <Box sx={{ textAlign: "left", mb: 4, paddingX: 1 }}>
-              <Typography
-                variant="subtitle1"
-                sx={{ color: TextfieldsColor, fontSize: "20px", fontWeight: 700 }}
-              >
-                Phone Number
-              </Typography>
-              <TextField
-                fullWidth
-                margin="normal"
-                variant="outlined"
-                size="small"
-                InputProps={{
-                  style: { borderRadius: "10px", color: "white" },
-                }}
-                sx={textFieldSx}
-              />
-            </Box>
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between",
-                gap: 10,
-                mt: 2,
-                mb: 4,
-                paddingX: 1,
-              }}
-            >
-              <Box sx={{ flex: 1, textAlign: "left" }}>
+            <form onSubmit={handleSignup}>
+              {/* Email Field */}
+              <Box sx={{ textAlign: "left", mb: 2, paddingX: 1 }}>
                 <Typography
                   variant="subtitle1"
                   sx={{ color: TextfieldsColor, fontSize: "20px", fontWeight: 700 }}
                 >
-                  Password
+                  Email
                 </Typography>
                 <TextField
                   fullWidth
-                  type="password"
                   margin="normal"
                   variant="outlined"
                   size="small"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   InputProps={{
                     style: { borderRadius: "10px", color: "white" },
                   }}
                   sx={textFieldSx}
                 />
               </Box>
-              <Box sx={{ flex: 1, textAlign: "left" }}>
+
+              {/* Username Field */}
+              <Box sx={{ textAlign: "left", mb: 2, paddingX: 1 }}>
                 <Typography
                   variant="subtitle1"
                   sx={{ color: TextfieldsColor, fontSize: "20px", fontWeight: 700 }}
                 >
-                  Confirm Password
+                  Username
                 </Typography>
                 <TextField
                   fullWidth
-                  type="password"
                   margin="normal"
                   variant="outlined"
                   size="small"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
                   InputProps={{
                     style: { borderRadius: "10px", color: "white" },
                   }}
                   sx={textFieldSx}
                 />
               </Box>
-            </Box>
-            <Button
-              fullWidth
-              variant="contained"
-              sx={{
-                mt: 2,
-                borderRadius: "25px",
-                backgroundColor: "#26245F",
-                fontSize: "24px",
-                color: "#97A9B2",
-                textTransform: "none",
-                "&:hover": { backgroundColor: "#211D55" },
-              }}
-            >
-              Sign Up
-            </Button>
+
+              {/* Phone Number Field */}
+              <Box sx={{ textAlign: "left", mb: 4, paddingX: 1 }}>
+                <Typography
+                  variant="subtitle1"
+                  sx={{ color: TextfieldsColor, fontSize: "20px", fontWeight: 700 }}
+                >
+                  Phone Number
+                </Typography>
+                <TextField
+                  fullWidth
+                  margin="normal"
+                  variant="outlined"
+                  size="small"
+                  value={phoneNumber}
+                  onChange={(e) => setPhoneNumber(e.target.value)}
+                  InputProps={{
+                    style: { borderRadius: "10px", color: "white" },
+                  }}
+                  sx={textFieldSx}
+                />
+              </Box>
+
+              {/* Password and Confirm Password Fields */}
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  gap: 10,
+                  mt: 2,
+                  mb: 4,
+                  paddingX: 1,
+                }}
+              >
+                <Box sx={{ flex: 1, textAlign: "left" }}>
+                  <Typography
+                    variant="subtitle1"
+                    sx={{ color: TextfieldsColor, fontSize: "20px", fontWeight: 700 }}
+                  >
+                    Password
+                  </Typography>
+                  <TextField
+                    fullWidth
+                    type="password"
+                    margin="normal"
+                    variant="outlined"
+                    size="small"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    InputProps={{
+                      style: { borderRadius: "10px", color: "white" },
+                    }}
+                    sx={textFieldSx}
+                  />
+                </Box>
+                <Box sx={{ flex: 1, textAlign: "left" }}>
+                  <Typography
+                    variant="subtitle1"
+                    sx={{ color: TextfieldsColor, fontSize: "20px", fontWeight: 700 }}
+                  >
+                    Confirm Password
+                  </Typography>
+                  <TextField
+                    fullWidth
+                    type="password"
+                    margin="normal"
+                    variant="outlined"
+                    size="small"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    InputProps={{
+                      style: { borderRadius: "10px", color: "white" },
+                    }}
+                    sx={textFieldSx}
+                  />
+                </Box>
+              </Box>
+
+              {/* Error / Success Messages */}
+              {error && (
+                <Typography sx={{ color: "red", mb: 2 }}>{error}</Typography>
+              )}
+              {success && (
+                <Typography sx={{ color: "green", mb: 2 }}>{success}</Typography>
+              )}
+
+              {/* Submit Button */}
+              <Button
+                fullWidth
+                variant="contained"
+                type="submit"
+                sx={{
+                  mt: 2,
+                  borderRadius: "25px",
+                  backgroundColor: "#26245F",
+                  fontSize: "24px",
+                  color: "#97A9B2",
+                  textTransform: "none",
+                  "&:hover": { backgroundColor: "#211D55" },
+                }}
+              >
+                Sign Up
+              </Button>
+            </form>
           </Container>
           <Box sx={{ display: "flex", justifyContent: "flex-start", mt: 2, pl: 2 }}>
             <Typography variant="body2" sx={{ color: "#AC77B1", fontSize: "16px" }}>
@@ -266,5 +372,3 @@ const Signup = () => {
     </Box>
   );
 };
-
-export default Signup;
