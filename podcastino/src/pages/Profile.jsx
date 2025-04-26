@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import FileUploadDialog from "./Modals/uploaddialog";
-import { fetchUserProfile } from './api/userService'
-import ProfileMenu from './Modals/ProfileMenu'
+import { fetchUserProfile } from "./api/userService";
+import ProfileMenu from "./Modals/ProfileMenu";
 import {
   Avatar,
   Box,
@@ -28,8 +28,8 @@ import {
   CssBaseline,
   Grid,
   CardMedia,
-  CardActions
-} from '@mui/material';
+  CardActions,
+} from "@mui/material";
 import {
   Edit,
   Favorite,
@@ -40,22 +40,22 @@ import {
   Upload as UploadIcon,
   Search,
   Share,
-  LibraryBooks as ShowsIcon
-} from '@mui/icons-material';
+  LibraryBooks as ShowsIcon,
+} from "@mui/icons-material";
 
 // Deep Purple Theme
 const theme = createTheme({
   palette: {
-    mode: 'dark',
+    mode: "dark",
     primary: {
-      main: '#673ab7',
+      main: "#673ab7",
     },
     secondary: {
-      main: '#ff4081',
+      main: "#ff4081",
     },
     background: {
-      default: '#121212',
-      paper: '#1e1e1e',
+      default: "#121212",
+      paper: "#1e1e1e",
     },
   },
 });
@@ -69,67 +69,87 @@ const UserProfilePage = () => {
   const [open, setOpen] = useState(false);
 
   const [userData, setUserData] = useState({
-    name: '',
-    email: '',
-    bio: '',
-    joinDate: '',
+    name: "",
+    email: "",
+    bio: "",
+    joinDate: "",
     stats: {
       listened: 0,
       favorites: 0,
       playlists: 0,
       shows: 0,
-    }
+    },
   });
 
   const [tempData, setTempData] = useState({ ...userData });
 
   // Sample data for tabs
   const historyItems = [
-    { id: 1, title: 'The Future of AI', podcast: 'Tech Today', time: '2 days ago' },
-    { id: 2, title: 'Mindfulness Meditation', podcast: 'Wellness Hour', time: '3 days ago' }
+    {
+      id: 1,
+      title: "The Future of AI",
+      podcast: "Tech Today",
+      time: "2 days ago",
+    },
+    {
+      id: 2,
+      title: "Mindfulness Meditation",
+      podcast: "Wellness Hour",
+      time: "3 days ago",
+    },
   ];
 
   const favoriteItems = [
-    { id: 1, title: 'Serial', podcast: 'Serial', episodes: 12 },
-    { id: 2, title: 'The Daily', podcast: 'NY Times', episodes: 356 }
+    { id: 1, title: "Serial", podcast: "Serial", episodes: 12 },
+    { id: 2, title: "The Daily", podcast: "NY Times", episodes: 356 },
   ];
 
   const playlistItems = [
-    { id: 1, name: 'Morning Commute', count: 15 },
-    { id: 2, name: 'Workout Mix', count: 8 }
+    { id: 1, name: "Morning Commute", count: 15 },
+    { id: 2, name: "Workout Mix", count: 8 },
   ];
 
   const episodeItems = [
-    { id: 1, title: 'Episode 42: The Ethics of AI', podcast: 'TechTalk', duration: '48:15' },
-    { id: 2, title: 'Building Sustainable Startups', podcast: 'Business Insights', duration: '38:45' }
+    {
+      id: 1,
+      title: "Episode 42: The Ethics of AI",
+      podcast: "TechTalk",
+      duration: "48:15",
+    },
+    {
+      id: 2,
+      title: "Building Sustainable Startups",
+      podcast: "Business Insights",
+      duration: "38:45",
+    },
   ];
 
   // Sample data for My Shows tab
   const myShows = [
     {
       id: 1,
-      title: 'TechTalk',
-      description: 'Weekly discussions about technology and innovation',
+      title: "TechTalk",
+      description: "Weekly discussions about technology and innovation",
       episodes: 42,
       subscribers: 12500,
-      image: 'https://via.placeholder.com/150/673ab7/ffffff?text=TechTalk'
+      image: "https://via.placeholder.com/150/673ab7/ffffff?text=TechTalk",
     },
     {
       id: 2,
-      title: 'Business Insights',
-      description: 'Interviews with business leaders and entrepreneurs',
+      title: "Business Insights",
+      description: "Interviews with business leaders and entrepreneurs",
       episodes: 28,
       subscribers: 8700,
-      image: 'https://via.placeholder.com/150/2196f3/ffffff?text=Business'
+      image: "https://via.placeholder.com/150/2196f3/ffffff?text=Business",
     },
     {
       id: 3,
-      title: 'Science Weekly',
-      description: 'Exploring the latest scientific discoveries',
+      title: "Science Weekly",
+      description: "Exploring the latest scientific discoveries",
       episodes: 15,
       subscribers: 5400,
-      image: 'https://via.placeholder.com/150/4caf50/ffffff?text=Science'
-    }
+      image: "https://via.placeholder.com/150/4caf50/ffffff?text=Science",
+    },
   ];
 
   const handleTabChange = (event, newValue) => {
@@ -170,15 +190,15 @@ const UserProfilePage = () => {
 
   // Handle sign out (remove token)
   const handleSignOut = () => {
-    localStorage.removeItem('access_token'); // Remove access token
+    localStorage.removeItem("access_token"); // Remove access token
     setIsLoggedIn(false); // Set login state to false
   };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setTempData(prev => ({
+    setTempData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
@@ -203,54 +223,71 @@ const UserProfilePage = () => {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <AppBar position="sticky" color="default" elevation={1}>
-      <Container maxWidth="xl">
-        <Stack direction="row" alignItems="center" py={2}>
-          <Typography variant="h4" sx={{ fontWeight: 700, mr: 4, color: 'primary.main' }}>
-            PODCASTINO
-          </Typography>
+        <Container maxWidth="xl">
+          <Stack direction="row" alignItems="center" py={2}>
+            <Typography
+              variant="h4"
+              sx={{ fontWeight: 700, mr: 4, color: "primary.main" }}
+            >
+              PODCASTINO
+            </Typography>
 
-          <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 3 }}>
-            <Button color="inherit">Discover</Button>
-            <Button color="inherit">Genres</Button>
-            <Button color="inherit">Top Shows</Button>
-          </Box>
+            <Box sx={{ display: { xs: "none", md: "flex" }, gap: 3 }}>
+              <Button color="inherit">Discover</Button>
+              <Button color="inherit">Genres</Button>
+              <Button color="inherit">Top Shows</Button>
+            </Box>
 
-          <Box sx={{ flexGrow: 1 }} />
+            <Box sx={{ flexGrow: 1 }} />
 
-          <TextField
-            size="small"
-            placeholder="Search podcasts..."
-            InputProps={{
-              startAdornment: <Search sx={{ mr: 1 }} />,
-            }}
-            sx={{ width: 250, mr: 2, display: { xs: 'none', sm: 'block' } }}
-          />
-
-          {/* Conditional rendering based on login state */}
-          {isLoggedIn ? (
-            <Avatar
-              sx={{ width: 40, height: 40, cursor: 'pointer' }}
-              alt="User Avatar"
-              src="https://randomuser.me/api/portraits/men/32.jpg"
-              onClick={handleAvatarClick} // Add onClick handler for avatar
+            <TextField
+              size="small"
+              placeholder="Search podcasts..."
+              InputProps={{
+                startAdornment: <Search sx={{ mr: 1 }} />,
+              }}
+              sx={{ width: 250, display: { xs: "none", sm: "block" } }}
             />
-          ) : (
-            <Button href="/signup" variant="contained" color="primary" sx={{ mr: 2 }}>
-              Sign In
+            <Button
+              variant="contained"
+              color="primary"
+              sx={{ mr: 2 }}
+              startIcon={<UploadIcon />}
+              onClick={handleUploadClick}
+            >
+              Upload
             </Button>
-          )}
-        </Stack>
-      </Container>
 
-      {/* Profile Menu Pop-up */}
-      <ProfileMenu
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleMenuClose}
-        onSignOut={handleSignOut}
-        userData={userData}
-      />
-    </AppBar>
+            {/* Conditional rendering based on login state */}
+            {isLoggedIn ? (
+              <Avatar
+                sx={{ width: 40, height: 40, cursor: "pointer" }}
+                alt="User Avatar"
+                src="https://randomuser.me/api/portraits/men/32.jpg"
+                onClick={handleAvatarClick} // Add onClick handler for avatar
+              />
+            ) : (
+              <Button
+                href="/signup"
+                variant="contained"
+                color="primary"
+                sx={{ mr: 2 }}
+              >
+                Sign In
+              </Button>
+            )}
+          </Stack>
+        </Container>
+
+        {/* Profile Menu Pop-up */}
+        <ProfileMenu
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleMenuClose}
+          onSignOut={handleSignOut}
+          userData={userData}
+        />
+      </AppBar>
 
       {/* File Upload Dialog */}
       <FileUploadDialog
@@ -262,9 +299,26 @@ const UserProfilePage = () => {
       <Container maxWidth="lg" sx={{ py: 4 }}>
         {/* Profile Header */}
         <Paper elevation={3} sx={{ p: 4, mb: 4 }}>
-          <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 4 }}>
-            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-              <Avatar alt={userData.name} src="https://randomuser.me/api/portraits/men/32.jpg" sx={{ width: 120, height: 120, mb: 2 }} />
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: { xs: "column", md: "row" },
+              gap: 4,
+            }}
+          >
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Avatar
+                alt={userData.name}
+                src="https://randomuser.me/api/portraits/men/32.jpg"
+                sx={{ width: 120, height: 120, mb: 2 }}
+              />
             </Box>
 
             <Box sx={{ flexGrow: 1 }}>
@@ -313,7 +367,7 @@ const UserProfilePage = () => {
                 </>
               )}
 
-              <Box sx={{ display: 'flex', gap: 2, mt: 3 }}>
+              <Box sx={{ display: "flex", gap: 2, mt: 3 }}>
                 <Chip label={`${userData.stats.listened} Listened`} />
                 <Chip label={`${userData.stats.favorites} Favorites`} />
                 <Chip label={`${userData.stats.playlists} Playlists`} />
@@ -322,20 +376,27 @@ const UserProfilePage = () => {
             </Box>
 
             {/* Edit and Save Buttons */}
-            <Box sx={{ display: "flex", justifyContent: "flex-end", alignItems: "flex-end", flexDirection: "column" }}>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "flex-end",
+                alignItems: "flex-end",
+                flexDirection: "column",
+              }}
+            >
               <Button
                 variant="outlined"
                 startIcon={<Edit />}
                 onClick={isEditing ? handleSaveClick : handleEditClick}
-                sx={{ width: '100%' }}
+                sx={{ width: "100%" }}
               >
-                {isEditing ? 'Save Profile' : 'Edit Profile'}
+                {isEditing ? "Save Profile" : "Edit Profile"}
               </Button>
               {isEditing && (
                 <Button
                   variant="text"
                   onClick={handleCancelClick}
-                  sx={{ width: '100%', mt: 1 }}
+                  sx={{ width: "100%", mt: 1 }}
                 >
                   Cancel
                 </Button>
@@ -367,15 +428,10 @@ const UserProfilePage = () => {
                 <ListItem
                   key={item.id}
                   secondaryAction={
-                    <Typography color="text.secondary">
-                      {item.time}
-                    </Typography>
+                    <Typography color="text.secondary">{item.time}</Typography>
                   }
                 >
-                  <ListItemText
-                    primary={item.title}
-                    secondary={item.podcast}
-                  />
+                  <ListItemText primary={item.title} secondary={item.podcast} />
                 </ListItem>
               ))}
             </List>
@@ -397,10 +453,7 @@ const UserProfilePage = () => {
                       <Favorite />
                     </Avatar>
                   </ListItemAvatar>
-                  <ListItemText
-                    primary={item.title}
-                    secondary={item.podcast}
-                  />
+                  <ListItemText primary={item.title} secondary={item.podcast} />
                 </ListItem>
               ))}
             </List>
@@ -437,7 +490,7 @@ const UserProfilePage = () => {
                 <ListItem
                   key={item.id}
                   secondaryAction={
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                    <Box sx={{ display: "flex", alignItems: "center" }}>
                       <Typography color="text.secondary" sx={{ mr: 1 }}>
                         {item.duration}
                       </Typography>
@@ -452,10 +505,7 @@ const UserProfilePage = () => {
                       <Podcasts />
                     </Avatar>
                   </ListItemAvatar>
-                  <ListItemText
-                    primary={item.title}
-                    secondary={item.podcast}
-                  />
+                  <ListItemText primary={item.title} secondary={item.podcast} />
                 </ListItem>
               ))}
             </List>
@@ -465,7 +515,13 @@ const UserProfilePage = () => {
             <Grid container spacing={3}>
               {myShows.map((show) => (
                 <Grid item xs={12} sm={6} md={4} key={show.id}>
-                  <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+                  <Card
+                    sx={{
+                      height: "100%",
+                      display: "flex",
+                      flexDirection: "column",
+                    }}
+                  >
                     <CardMedia
                       component="img"
                       height="140"
@@ -476,10 +532,19 @@ const UserProfilePage = () => {
                       <Typography gutterBottom variant="h5" component="div">
                         {show.title}
                       </Typography>
-                      <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                      <Typography
+                        variant="body2"
+                        color="text.secondary"
+                        sx={{ mb: 2 }}
+                      >
                         {show.description}
                       </Typography>
-                      <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                        }}
+                      >
                         <Typography variant="body2">
                           {show.episodes} episodes
                         </Typography>
@@ -488,7 +553,7 @@ const UserProfilePage = () => {
                         </Typography>
                       </Box>
                     </CardContent>
-                    <CardActions sx={{ justifyContent: 'flex-end' }}>
+                    <CardActions sx={{ justifyContent: "flex-end" }}>
                       <Button size="small" color="primary">
                         Manage
                       </Button>
@@ -505,12 +570,17 @@ const UserProfilePage = () => {
 
         <Divider sx={{ my: 4 }} />
         <Container maxWidth="lg" sx={{ py: 3 }}>
-          <Box sx={{ display: 'flex', justifyContent: 'center', gap: 4 }}>
+          <Box sx={{ display: "flex", justifyContent: "center", gap: 4 }}>
             <Button size="small">Privacy Policy</Button>
             <Button size="small">Terms of Service</Button>
             <Button size="small">Contact Us</Button>
           </Box>
-          <Typography variant="body2" color="text.secondary" align="center" sx={{ mt: 2 }}>
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            align="center"
+            sx={{ mt: 2 }}
+          >
             © {new Date().getFullYear()} Podcastino. All rights reserved.
           </Typography>
         </Container>
