@@ -72,13 +72,14 @@ function App() {
       {/* Page Content */}
       <Box>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<PodcastLanding />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/forget-pass" element={<ForgetPassword />} />
+          <Route path="/episode" element={<PodcastEpisodePage />} />
+          <Route path="/shows" element={<ShowsPage />} />
+          <Route path="/topshows" element={<TopShowsPage />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/podcast/:id" element={<PodcastEpisodePage />} />
-          <Route path="/genre/:name" element={<GenrePage />} />
         </Routes>
       </Box>
     </Router>

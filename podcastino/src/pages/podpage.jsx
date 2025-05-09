@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import React, { useState } from "react";
 import {
   Box,
   Container,
@@ -19,8 +18,7 @@ import {
   Stack,
   ThemeProvider,
   createTheme,
-  CssBaseline,
-  LinearProgress
+  CssBaseline
 } from "@mui/material";
 import {
   PlayArrow,
@@ -32,8 +30,7 @@ import {
   MoreVert,
   Message,
   Subscriptions,
-  Download,
-  ArrowBack
+  Download
 } from "@mui/icons-material";
 
 // Deep Purple Theme
@@ -54,128 +51,65 @@ const theme = createTheme({
 });
 
 const PodcastEpisodePage = () => {
-  const { id } = useParams();
-  const navigate = useNavigate();
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
   const [comment, setComment] = useState('');
-  const [comments, setComments] = useState([]);
-  const [currentEpisode, setCurrentEpisode] = useState(null);
-  const [podcast, setPodcast] = useState(null);
-  const [progress, setProgress] = useState(0);
+  const [comments, setComments] = useState([
+    { id: 1, user: 'JaneDoe', text: 'Great episode! Really insightful discussion.', time: '2 days ago' },
+    { id: 2, user: 'PodcastFan123', text: 'When will the next episode be out?', time: '1 day ago' },
+  ]);
 
-  // Sample podcast data with real images
-  const podcastData = {
-    "serial": {
-      title: "Serial",
-      host: "Sarah Koenig",
-      coverImage: "https://images.unsplash.com/photo-1593697909683-bccb1b9e68a4?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
-      description: "Investigative journalism series that unfolds one story over the course of a season.",
-      tags: ["True Crime", "Investigative", "Journalism"],
-      episodes: [
-        {
-          id: 42,
-          title: 'Episode 42: The Alibi',
-          description: `We meet Adnan Syed, who's serving a life sentence for murdering his ex-girlfriend, Hae Min Lee. 
-          He says he's innocent. This episode examines the case against him.`,
-          date: 'October 3, 2014',
-          duration: '54:21',
-          image: "https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
-          audio: "https://example.com/audio1.mp3"
-        },
-        {
-          id: 41, 
-          title: 'Episode 41: The Breakup', 
-          description: 'We learn more about Adnan and Hae\'s relationship and what happened when it ended.',
-          date: 'October 10, 2014',
-          duration: '52:18',
-          image: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
-          audio: "https://example.com/audio2.mp3"
-        }
-      ]
-    },
-    "the-daily": {
-      title: "The Daily",
-      host: "Michael Barbaro",
-      coverImage: "https://images.unsplash.com/photo-1478737270239-2f02b77fc618?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
-      description: "This is what the news should sound like. The biggest stories of our time.",
-      tags: ["News", "Current Affairs", "Politics"],
-      episodes: [
-        {
-          id: 42,
-          title: 'The State of the War in Ukraine',
-          description: `As the war in Ukraine enters its second year, we look at the current state of the conflict.`,
-          date: 'February 24, 2023',
-          duration: '32:15',
-          image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
-          audio: "https://example.com/audio3.mp3"
-        }
-      ]
-    },
-    "techtalk": {
-      title: "TechTalk with Sarah Johnson",
-      host: "Sarah Johnson",
-      coverImage: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
-      description: "Weekly discussions about technology and innovation",
-      tags: ["Technology", "Innovation", "Interviews"],
-      episodes: [
-        {
-          id: 42,
-          title: 'Episode 42: The Ethics of Artificial Intelligence',
-          description: `In this episode, we dive deep into the ethical considerations surrounding artificial intelligence. 
-          Our guest, Dr. Michael Chen from the AI Ethics Institute, shares his perspectives on bias in algorithms, 
-          privacy concerns, and the future of responsible AI development.`,
-          date: 'May 22, 2023',
-          duration: '48:15',
-          image: "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
-          audio: "https://example.com/audio4.mp3"
-        }
-      ]
-    }
-  };
+  const [currentEpisode, setCurrentEpisode] = useState({
+    id: 42,
+    title: 'Episode 42: The Ethics of Artificial Intelligence',
+    description: `In this episode, we dive deep into the ethical considerations surrounding artificial intelligence. 
+    Our guest, Dr. Michael Chen from the AI Ethics Institute, shares his perspectives on bias in algorithms, 
+    privacy concerns, and the future of responsible AI development.`,
+    date: 'May 22, 2023',
+    duration: '48:15',
+    progress: '15:32'
+  });
 
-  useEffect(() => {
-    // Simulate loading data based on the podcast ID from URL
-    const selectedPodcast = podcastData[id] || {
-      title: "TechTalk with Sarah Johnson",
-      host: "Sarah Johnson",
-      coverImage: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
-      description: "Weekly discussions about technology and innovation",
-      tags: ["Technology", "Innovation", "Interviews"],
-      episodes: [
-        {
-          id: 42,
-          title: 'Episode 42: The Ethics of Artificial Intelligence',
-          description: `In this episode, we dive deep into the ethical considerations surrounding artificial intelligence.`,
-          date: 'May 22, 2023',
-          duration: '48:15',
-          image: "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
-          audio: "https://example.com/audio4.mp3"
-        }
-      ]
-    };
-    
-    setPodcast(selectedPodcast);
-    setCurrentEpisode(selectedPodcast.episodes[0]);
-    setComments([
-      { id: 1, user: 'JaneDoe', text: 'Great episode! Really insightful discussion.', time: '2 days ago' },
-      { id: 2, user: 'PodcastFan123', text: 'When will the next episode be out?', time: '1 day ago' },
-    ]);
-    
-    // Simulate progress update for demo purposes
-    const interval = setInterval(() => {
-      if (isPlaying) {
-        setProgress(prev => (prev >= 100 ? 0 : prev + 5));
-      }
-    }, 1000);
-    
-    return () => clearInterval(interval);
-  }, [id, isPlaying]);
+  const episodes = [
+    { 
+      id: 42,
+      title: 'The Ethics of Artificial Intelligence', 
+      description: `In this episode, we dive deep into the ethical considerations surrounding artificial intelligence. 
+      Our guest, Dr. Michael Chen from the AI Ethics Institute, shares his perspectives on bias in algorithms, 
+      privacy concerns, and the future of responsible AI development.`,
+      duration: '48:15', 
+      date: 'May 22, 2023',
+      progress: '15:32'
+    },
+    { 
+      id: 41, 
+      title: 'The Future of AI in Daily Life', 
+      description: 'Exploring how AI will transform our everyday experiences from smart homes to personalized healthcare.',
+      duration: '45:22', 
+      date: 'May 15, 2023',
+      progress: '22:10'
+    },
+    { 
+      id: 40, 
+      title: 'Interview with Tech Pioneer', 
+      description: 'Conversation with tech visionary about the next decade of innovation and disruption.',
+      duration: '52:18', 
+      date: 'May 8, 2023',
+      progress: '08:45'
+    },
+    { 
+      id: 39, 
+      title: 'Building Sustainable Startups', 
+      description: 'How to create tech companies that are both profitable and environmentally responsible.',
+      duration: '38:45', 
+      date: 'May 1, 2023',
+      progress: '30:00'
+    },
+  ];
 
   const handleEpisodeSelect = (episode) => {
     setCurrentEpisode(episode);
-    setIsPlaying(false);
-    setProgress(0);
+    setIsPlaying(false); // Reset play state when changing episodes
     // In a real app, you would also stop any currently playing audio here
   };
 
@@ -192,93 +126,72 @@ const PodcastEpisodePage = () => {
     }
   };
 
-  if (!podcast || !currentEpisode) {
-    return (
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <Container maxWidth="lg" sx={{ py: 4, textAlign: 'center' }}>
-          <Typography variant="h4">Loading podcast...</Typography>
-        </Container>
-      </ThemeProvider>
-    );
-  }
-
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <AppBar position="sticky" color="default" elevation={1}>
-        <Container maxWidth="xl">
-          <Stack direction="row" alignItems="center" py={2}>
-            <IconButton onClick={() => navigate(-1)} sx={{ mr: 2 }}>
-              <ArrowBack />
-            </IconButton>
-            <Typography variant="h4" sx={{ fontWeight: 700, color: 'primary.main' }}>
-              PODCASTINO
-            </Typography>
-            
-            <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 3, ml: 4 }}>
-              <Button color="inherit">Discover</Button>
-              <Button color="inherit">Genres</Button>
-              <Button color="inherit">Top Shows</Button>
-            </Box>
-            
-            <Box sx={{ flexGrow: 1 }} />
-            
-            <TextField
-              size="small"
-              placeholder="Search podcasts..."
-              InputProps={{
-                startAdornment: <Search sx={{ mr: 1 }} />,
-              }}
-              sx={{ width: 250, mr: 2, display: { xs: 'none', sm: 'block' } }}
-            />
-            
-            <Button href="/signup" variant="contained" color="primary">
-              Sign In
-            </Button>
-          </Stack>
-        </Container>
-      </AppBar>
-      
+          <Container maxWidth="xl">
+            <Stack direction="row" alignItems="center" py={2}>
+              <Typography variant="h4" sx={{ fontWeight: 700, mr: 4, color: 'primary.main' }}>
+                PODCASTINO
+              </Typography>
+              
+              <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 3 }}>
+                <Button color="inherit">Discover</Button>
+                <Button color="inherit">Genres</Button>
+                <Button color="inherit">Top Shows</Button>
+              </Box>
+              
+              <Box sx={{ flexGrow: 1 }} />
+              
+              <TextField
+                size="small"
+                placeholder="Search podcasts..."
+                InputProps={{
+                  startAdornment: <Search sx={{ mr: 1 }} />,
+                }}
+                sx={{ width: 250, mr: 2, display: { xs: 'none', sm: 'block' } }}
+              />
+              
+              <Button href="/signup" variant="contained" color="primary" sx={{ mr: 2 }}>
+                Sign In
+              </Button>
+            </Stack>
+          </Container>
+        </AppBar>
       <Container maxWidth="lg" sx={{ py: 4 }}>
         {/* Podcast Header */}
-        <Box sx={{ display: 'flex', mb: 4, flexDirection: { xs: 'column', sm: 'row' } }}>
+        <Box sx={{ display: 'flex', mb: 4 }}>
           <Avatar
-            alt={podcast.title}
-            src={podcast.coverImage}
-            sx={{ 
-              width: 150, 
-              height: 150, 
-              mr: { sm: 4 },
-              mb: { xs: 2, sm: 0 }
-            }}
+            alt="Podcast Cover"
+            src="https://via.placeholder.com/150/673ab7/ffffff?text=TechTalk"
+            sx={{ width: 150, height: 150, mr: 4 }}
           />
           <Box>
             <Typography variant="h4" sx={{ fontWeight: 700, mb: 1 }}>
-              {podcast.title}
+              TechTalk with Sarah Johnson
             </Typography>
             <Typography variant="subtitle1" color="text.secondary" sx={{ mb: 2 }}>
-              Hosted by {podcast.host}
+              Weekly discussions about technology and innovation
             </Typography>
-            <Stack direction="row" spacing={1} sx={{ mb: 2, flexWrap: 'wrap', gap: 1 }}>
-              {podcast.tags.map(tag => (
-                <Chip key={tag} label={tag} size="small" />
-              ))}
+            <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
+              <Chip label="Technology" size="small" />
+              <Chip label="Innovation" size="small" />
+              <Chip label="Interviews" size="small" />
             </Stack>
-            <Stack direction="row" spacing={2}>
-              <Button
-                variant="contained"
-                startIcon={<Subscriptions />}
-              >
-                Subscribe
-              </Button>
-              <Button
-                variant="outlined"
-                startIcon={<Download />}
-              >
-                Download All
-              </Button>
-            </Stack>
+            <Button
+              variant="contained"
+              startIcon={<Subscriptions />}
+              sx={{ mr: 2 }}
+            >
+              Subscribe
+            </Button>
+            <Button
+              variant="outlined"
+              startIcon={<Download />}
+            >
+              Download
+            </Button>
           </Box>
         </Box>
 
@@ -290,34 +203,30 @@ const PodcastEpisodePage = () => {
           <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
             Published: {currentEpisode.date} • Duration: {currentEpisode.duration}
           </Typography>
-          
-          <Box sx={{ mb: 3 }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-              <IconButton
-                color="primary"
-                size="large"
-                onClick={() => setIsPlaying(!isPlaying)}
-                sx={{ mr: 2 }}
-              >
-                {isPlaying ? <Pause fontSize="large" /> : <PlayArrow fontSize="large" />}
-              </IconButton>
-              <Box sx={{ flexGrow: 1 }}>
-                <Typography variant="body1">Now Playing</Typography>
-                <Typography variant="body2" color="text.secondary">
-                  {Math.floor(progress * 0.48)}:${Math.floor((progress * 0.48 % 1) * 60).toString().padStart(2, '0')} / {currentEpisode.duration}
-                </Typography>
-              </Box>
-              <IconButton onClick={() => setIsLiked(!isLiked)}>
-                {isLiked ? <Favorite color="secondary" /> : <FavoriteBorder />}
-              </IconButton>
-              <IconButton>
-                <Share />
-              </IconButton>
-              <IconButton>
-                <Download />
-              </IconButton>
+          <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
+            <IconButton
+              color="primary"
+              size="large"
+              onClick={() => setIsPlaying(!isPlaying)}
+              sx={{ mr: 2 }}
+            >
+              {isPlaying ? <Pause fontSize="large" /> : <PlayArrow fontSize="large" />}
+            </IconButton>
+            <Box sx={{ flexGrow: 1 }}>
+              <Typography variant="body1">Now Playing</Typography>
+              <Typography variant="body2" color="text.secondary">
+                {currentEpisode.progress} / {currentEpisode.duration}
+              </Typography>
             </Box>
-            <LinearProgress variant="determinate" value={progress} sx={{ height: 6, borderRadius: 3 }} />
+            <IconButton onClick={() => setIsLiked(!isLiked)}>
+              {isLiked ? <Favorite color="secondary" /> : <FavoriteBorder />}
+            </IconButton>
+            <IconButton>
+              <Share />
+            </IconButton>
+            <IconButton>
+              <MoreVert />
+            </IconButton>
           </Box>
 
           <Typography variant="body1" paragraph>
@@ -330,7 +239,7 @@ const PodcastEpisodePage = () => {
           More Episodes
         </Typography>
         <List sx={{ mb: 4 }}>
-          {podcast.episodes.filter(ep => ep.id !== currentEpisode.id).map((episode) => (
+          {episodes.filter(ep => ep.id !== currentEpisode.id).map((episode) => (
             <ListItem
               key={episode.id}
               button
@@ -343,20 +252,13 @@ const PodcastEpisodePage = () => {
               sx={{ py: 2 }}
             >
               <ListItemAvatar>
-                <Avatar src={episode.image} variant="rounded">
-                  {!episode.image && <PlayArrow />}
+                <Avatar>
+                  <PlayArrow />
                 </Avatar>
               </ListItemAvatar>
               <ListItemText
                 primary={episode.title}
-                secondary={
-                  <>
-                    <Typography component="span" variant="body2" color="text.primary">
-                      {episode.date}
-                    </Typography>
-                    {` — ${episode.description.substring(0, 60)}...`}
-                  </>
-                }
+                secondary={episode.date}
               />
             </ListItem>
           ))}
@@ -421,29 +323,30 @@ const PodcastEpisodePage = () => {
         {/* Podcast Info */}
         <Paper elevation={3} sx={{ p: 3 }}>
           <Typography variant="h6" sx={{ fontWeight: 700, mb: 2 }}>
-            About {podcast.title}
+            About TechTalk
           </Typography>
           <Typography variant="body1" paragraph>
-            {podcast.description}
+            TechTalk is a weekly podcast hosted by Sarah Johnson that explores the intersection of technology, 
+            business, and society. Each episode features interviews with industry leaders, innovators, and thinkers 
+            who are shaping the future of technology.
           </Typography>
           <Typography variant="body1" paragraph>
-            Subscribe to never miss an episode, and join our community of enthusiasts who are passionate 
-            about this content.
+            Subscribe to never miss an episode, and join our community of tech enthusiasts who are passionate 
+            about understanding how technology impacts our world.
           </Typography>
         </Paper>
       </Container>
-      
       <Divider sx={{ my: 4 }} />
-      <Container maxWidth="lg" sx={{ py: 3 }}>
-        <Box sx={{ display: 'flex', justifyContent: 'center', gap: 4 }}>
-          <Button size="small">Privacy Policy</Button>
-          <Button size="small">Terms of Service</Button>
-          <Button size="small">Contact Us</Button>
-        </Box>
-        <Typography variant="body2" color="text.secondary" align="center" sx={{ mt: 2 }}>
-          © {new Date().getFullYear()} Podcastino. All rights reserved.
-        </Typography>
-      </Container>
+        <Container maxWidth="lg" sx={{ py: 3 }}>
+          <Box sx={{ display: 'flex', justifyContent: 'center', gap: 4 }}>
+            <Button size="small">Privacy Policy</Button>
+            <Button size="small">Terms of Service</Button>
+            <Button size="small">Contact Us</Button>
+          </Box>
+          <Typography variant="body2" color="text.secondary" align="center" sx={{ mt: 2 }}>
+            © {new Date().getFullYear()} Podcastino. All rights reserved.
+          </Typography>
+        </Container>
     </ThemeProvider>
   );
 };
