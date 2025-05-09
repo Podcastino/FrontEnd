@@ -1,0 +1,476 @@
+import React, { useState } from 'react';
+import FileUploadDialog from "./uploaddialog";
+import {
+  Avatar,
+  Box,
+  Button,
+  Card,
+  CardContent,
+  AppBar,
+  Stack,
+  Chip,
+  Container,
+  Divider,
+  IconButton,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
+  Paper,
+  Tab,
+  Tabs,
+  Typography,
+  TextField,
+  ThemeProvider,
+  createTheme,
+  CssBaseline,
+  Grid,
+  CardMedia,
+  CardActions
+} from '@mui/material';
+import {
+  Edit,
+  Favorite,
+  History,
+  PlaylistPlay,
+  Podcasts,
+  MoreVert,
+  Upload as UploadIcon,
+  Search,
+  Share,
+  LibraryBooks as ShowsIcon
+} from '@mui/icons-material';
+
+// Deep Purple Theme
+const theme = createTheme({
+  palette: {
+    mode: 'dark',
+    primary: {
+      main: '#673ab7',
+    },
+    secondary: {
+      main: '#ff4081',
+    },
+    background: {
+      default: '#121212',
+      paper: '#1e1e1e',
+    },
+  },
+});
+
+const UserProfilePage = () => {
+  const [tabValue, setTabValue] = useState(0);
+  const [isEditing, setIsEditing] = useState(false);
+  const [uploadDialogOpen, setUploadDialogOpen] = useState(false);
+  
+  const [userData, setUserData] = useState({
+    name: 'Alex Johnson',
+    email: 'alex.johnson@example.com',
+    bio: 'Podcast creator and tech enthusiast',
+    joinDate: 'Joined March 2022',
+    stats: {
+      listened: 342,
+      favorites: 28,
+      playlists: 5,
+      shows: 3
+    }
+  });
+
+  const [tempData, setTempData] = useState({ ...userData });
+
+  // Sample data for tabs
+  const historyItems = [
+    { id: 1, title: 'The Future of AI', podcast: 'Tech Today', time: '2 days ago' },
+    { id: 2, title: 'Mindfulness Meditation', podcast: 'Wellness Hour', time: '3 days ago' }
+  ];
+
+  const favoriteItems = [
+    { id: 1, title: 'Serial', podcast: 'Serial', episodes: 12 },
+    { id: 2, title: 'The Daily', podcast: 'NY Times', episodes: 356 }
+  ];
+
+  const playlistItems = [
+    { id: 1, name: 'Morning Commute', count: 15 },
+    { id: 2, name: 'Workout Mix', count: 8 }
+  ];
+
+  const episodeItems = [
+    { id: 1, title: 'Episode 42: The Ethics of AI', podcast: 'TechTalk', duration: '48:15' },
+    { id: 2, title: 'Building Sustainable Startups', podcast: 'Business Insights', duration: '38:45' }
+  ];
+
+  // Sample data for My Shows tab
+  const myShows = [
+    { 
+      id: 1, 
+      title: 'TechTalk', 
+      description: 'Weekly discussions about technology and innovation',
+      episodes: 42,
+      subscribers: 12500,
+      image: 'https://via.placeholder.com/150/673ab7/ffffff?text=TechTalk'
+    },
+    { 
+      id: 2, 
+      title: 'Business Insights', 
+      description: 'Interviews with business leaders and entrepreneurs',
+      episodes: 28,
+      subscribers: 8700,
+      image: 'https://via.placeholder.com/150/2196f3/ffffff?text=Business'
+    },
+    { 
+      id: 3, 
+      title: 'Science Weekly', 
+      description: 'Exploring the latest scientific discoveries',
+      episodes: 15,
+      subscribers: 5400,
+      image: 'https://via.placeholder.com/150/4caf50/ffffff?text=Science'
+    }
+  ];
+
+  const handleTabChange = (event, newValue) => {
+    setTabValue(newValue);
+  };
+
+  const handleUploadClick = () => {
+    setUploadDialogOpen(true);
+  };
+
+  const handleUploadClose = () => {
+    setUploadDialogOpen(false);
+  };
+
+  const handleEditClick = () => {
+    setIsEditing(true);
+    setTempData({ ...userData });
+  };
+
+  const handleSaveClick = () => {
+    setUserData({ ...tempData });
+    setIsEditing(false);
+  };
+
+  const handleCancelClick = () => {
+    setIsEditing(false);
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setTempData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  return (
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <AppBar position="sticky" color="default" elevation={1}>
+        <Container maxWidth="xl">
+          <Stack direction="row" alignItems="center" py={2}>
+            <Typography variant="h4" sx={{ fontWeight: 700, mr: 4, color: 'primary.main' }}>
+              PODCASTINO
+            </Typography>
+            
+            <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 3 }}>
+              <Button color="inherit">Discover</Button>
+              <Button color="inherit">Genres</Button>
+              <Button color="inherit">Top Shows</Button>
+            </Box>
+            
+            <Box sx={{ flexGrow: 1 }} />
+            
+            <TextField
+              size="small"
+              placeholder="Search podcasts..."
+              InputProps={{
+                startAdornment: <Search sx={{ mr: 1 }} />,
+              }}
+              sx={{ width: 250, mr: 2, display: { xs: 'none', sm: 'block' } }}
+            />
+            
+            <Button href="/signup" variant="contained" color="primary" sx={{ mr: 2 }}>
+              Sign In
+            </Button>
+            <Button 
+              variant="contained" 
+              color="primary" 
+              sx={{ mr: 2 }}
+              startIcon={<UploadIcon />}
+              onClick={handleUploadClick}
+            >
+              Upload
+            </Button>
+          </Stack>
+        </Container>
+      </AppBar>
+
+      {/* File Upload Dialog */}
+      <FileUploadDialog 
+        open={uploadDialogOpen} 
+        onClose={handleUploadClose}
+        creatorShows={myShows} // Pass the shows data to the dialog
+      />
+
+      <Container maxWidth="lg" sx={{ py: 4 }}>
+        {/* Profile Header */}
+        <Paper elevation={3} sx={{ p: 4, mb: 4 }}>
+          <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 4 }}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+              <Avatar
+                alt={userData.name}
+                src="https://randomuser.me/api/portraits/men/32.jpg"
+                sx={{ width: 120, height: 120, mb: 2 }}
+              />
+            </Box>
+
+            <Box sx={{ flexGrow: 1 }}>
+              {isEditing ? (
+                <>
+                  <TextField
+                    fullWidth
+                    label="Name"
+                    name="name"
+                    value={tempData.name}
+                    onChange={handleInputChange}
+                    sx={{ mb: 2 }}
+                  />
+                  <TextField
+                    fullWidth
+                    label="Email"
+                    name="email"
+                    value={tempData.email}
+                    onChange={handleInputChange}
+                    sx={{ mb: 2 }}
+                  />
+                  <TextField
+                    fullWidth
+                    label="Bio"
+                    name="bio"
+                    value={tempData.bio}
+                    onChange={handleInputChange}
+                    multiline
+                    rows={3}
+                  />
+                </>
+              ) : (
+                <>
+                  <Typography variant="h4" sx={{ fontWeight: 700, mb: 1 }}>
+                    {userData.name}
+                  </Typography>
+                  <Typography color="text.secondary" sx={{ mb: 2 }}>
+                    {userData.email}
+                  </Typography>
+                  <Typography paragraph sx={{ mb: 3 }}>
+                    {userData.bio}
+                  </Typography>
+                  <Typography color="text.secondary" variant="body2">
+                    {userData.joinDate}
+                  </Typography>
+                </>
+              )}
+
+              <Box sx={{ display: 'flex', gap: 2, mt: 3 }}>
+                <Chip label={`${userData.stats.listened} Listened`} />
+                <Chip label={`${userData.stats.favorites} Favorites`} />
+                <Chip label={`${userData.stats.playlists} Playlists`} />
+                <Chip label={`${userData.stats.shows} Shows`} />
+              </Box>
+            </Box>
+            <Box sx={{ display: "flex", justifyContent: "flex-end", alignItems: "flex-end", flexDirection: "column" }}>
+              <Button
+                variant="outlined"
+                startIcon={<Edit />}
+                onClick={isEditing ? handleSaveClick : handleEditClick}
+                sx={{ width: '100%' }}
+              >
+                {isEditing ? 'Save Profile' : 'Edit Profile'}
+              </Button>
+              {isEditing && (
+                <Button
+                  variant="text"
+                  onClick={handleCancelClick}
+                  sx={{ width: '100%', mt: 1 }}
+                >
+                  Cancel
+                </Button>
+              )}
+            </Box>
+          </Box>
+        </Paper>
+
+        {/* Profile Tabs */}
+        <Tabs
+          value={tabValue}
+          onChange={handleTabChange}
+          variant="scrollable"
+          scrollButtons="auto"
+          sx={{ mb: 3 }}
+        >
+          <Tab icon={<History />} label="History" />
+          <Tab icon={<Favorite />} label="Favorites" />
+          <Tab icon={<PlaylistPlay />} label="Playlists" />
+          <Tab icon={<Podcasts />} label="Episodes" />
+          <Tab icon={<ShowsIcon />} label="My Shows" />
+        </Tabs>
+
+        {/* Tab Content */}
+        <Paper elevation={3} sx={{ p: 3 }}>
+          {tabValue === 0 && (
+            <List>
+              {historyItems.map((item) => (
+                <ListItem
+                  key={item.id}
+                  secondaryAction={
+                    <Typography color="text.secondary">
+                      {item.time}
+                    </Typography>
+                  }
+                >
+                  <ListItemText
+                    primary={item.title}
+                    secondary={item.podcast}
+                  />
+                </ListItem>
+              ))}
+            </List>
+          )}
+
+          {tabValue === 1 && (
+            <List>
+              {favoriteItems.map((item) => (
+                <ListItem
+                  key={item.id}
+                  secondaryAction={
+                    <Typography color="text.secondary">
+                      {item.episodes} episodes
+                    </Typography>
+                  }
+                >
+                  <ListItemAvatar>
+                    <Avatar>
+                      <Favorite />
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText
+                    primary={item.title}
+                    secondary={item.podcast}
+                  />
+                </ListItem>
+              ))}
+            </List>
+          )}
+
+          {tabValue === 2 && (
+            <List>
+              {playlistItems.map((item) => (
+                <ListItem
+                  key={item.id}
+                  secondaryAction={
+                    <Typography color="text.secondary">
+                      {item.count} episodes
+                    </Typography>
+                  }
+                >
+                  <ListItemAvatar>
+                    <Avatar>
+                      <PlaylistPlay />
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText
+                    primary={item.name}
+                    secondary={`${item.count} episodes`}
+                  />
+                </ListItem>
+              ))}
+            </List>
+          )}
+
+          {tabValue === 3 && (
+            <List>
+              {episodeItems.map((item) => (
+                <ListItem
+                  key={item.id}
+                  secondaryAction={
+                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                      <Typography color="text.secondary" sx={{ mr: 1 }}>
+                        {item.duration}
+                      </Typography>
+                      <IconButton>
+                        <Share fontSize="small" />
+                      </IconButton>
+                    </Box>
+                  }
+                >
+                  <ListItemAvatar>
+                    <Avatar>
+                      <Podcasts />
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText
+                    primary={item.title}
+                    secondary={item.podcast}
+                  />
+                </ListItem>
+              ))}
+            </List>
+          )}
+
+          {tabValue === 4 && (
+            <Grid container spacing={3}>
+              {myShows.map((show) => (
+                <Grid item xs={12} sm={6} md={4} key={show.id}>
+                  <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+                    <CardMedia
+                      component="img"
+                      height="140"
+                      image={show.image}
+                      alt={show.title}
+                    />
+                    <CardContent sx={{ flexGrow: 1 }}>
+                      <Typography gutterBottom variant="h5" component="div">
+                        {show.title}
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                        {show.description}
+                      </Typography>
+                      <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <Typography variant="body2">
+                          {show.episodes} episodes
+                        </Typography>
+                        <Typography variant="body2">
+                          {show.subscribers.toLocaleString()} subscribers
+                        </Typography>
+                      </Box>
+                    </CardContent>
+                    <CardActions sx={{ justifyContent: 'flex-end' }}>
+                      <Button size="small" color="primary">
+                        Manage
+                      </Button>
+                      <Button size="small" color="primary">
+                        View Analytics
+                      </Button>
+                    </CardActions>
+                  </Card>
+                </Grid>
+              ))}
+            </Grid>
+          )}
+        </Paper>
+
+        <Divider sx={{ my: 4 }} />
+        <Container maxWidth="lg" sx={{ py: 3 }}>
+          <Box sx={{ display: 'flex', justifyContent: 'center', gap: 4 }}>
+            <Button size="small">Privacy Policy</Button>
+            <Button size="small">Terms of Service</Button>
+            <Button size="small">Contact Us</Button>
+          </Box>
+          <Typography variant="body2" color="text.secondary" align="center" sx={{ mt: 2 }}>
+            © {new Date().getFullYear()} Podcastino. All rights reserved.
+          </Typography>
+        </Container>
+      </Container>
+    </ThemeProvider>
+  );
+};
+
+export default UserProfilePage;
