@@ -203,7 +203,6 @@ const PodcastEpisodePage = () => {
           <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
             Published: {currentEpisode.date} • Duration: {currentEpisode.duration}
           </Typography>
-          
           <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
             <IconButton
               color="primary"

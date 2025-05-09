@@ -1,6 +1,7 @@
 import React from "react";
 import { Box, Typography, CircularProgress,createTheme, keyframes } from "@mui/material";
 import { Podcasts } from "@mui/icons-material";
+
 const theme = createTheme({
   palette: {
     mode: 'dark',
@@ -17,6 +18,7 @@ const theme = createTheme({
       paper: '#1e1e1e',
     },
   },
+
   breakpoints: {
     values: {
       xs: 0,
@@ -27,9 +29,6 @@ const theme = createTheme({
     },
   },
 });
-
-
-
 
 // Premium animations
 const floatAnimation = keyframes`
