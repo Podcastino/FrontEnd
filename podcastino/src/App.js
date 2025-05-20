@@ -1,10 +1,11 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Home from "./pages/Home";
 import Login from "./pages/Login";
-import Signup from "./pages/Signup";
+import PodcastLanding from './pages/landing'
+import SignUpPage from "./pages/newsignup";
+import TopShowsPage from './pages/topshows'
+import ShowsPage from './pages/generes'
 import Profile from "./pages/Profile";
-import GenrePage from "./pages/Genre";
 import PodcastEpisodePage from "./pages/podpage";
 import { AppBar, Container, Stack, Typography, Button, Box, TextField, ThemeProvider, createTheme, CssBaseline } from "@mui/material";
 import ForgetPassword from "./pages/Forget-pass";
@@ -74,7 +75,7 @@ function App() {
         <Routes>
           <Route path="/" element={<PodcastLanding />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
+          <Route path="/signup" element={<SignUpPage />} />
           <Route path="/forget-pass" element={<ForgetPassword />} />
           <Route path="/episode" element={<PodcastEpisodePage />} />
           <Route path="/shows" element={<ShowsPage />} />
