@@ -313,13 +313,13 @@ function App() {
         {/* Page Content */}
         <Box>
           <Routes>
-            <Route path="/" element={<PodcastLanding theme={theme} isMobile={isMobile} isTablet={isTablet}/>} />
+            <Route path="/" element={<PodcastLanding Theme={theme} isMobile={isMobile} isTablet={isTablet}/>} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUpPage />} />
             <Route path="/forget-pass" element={<ForgetPassword />} />
             <Route path="/episode" element={<PodcastEpisodePage />} />
-            <Route path="/shows" element={<ShowsPage />} />
-            <Route path="/topshows" element={<TopShowsPage />} />
+            <Route path="/shows" element={<ShowsPage Theme={theme} isMobile={isMobile} isTablet={isTablet} />} />
+            <Route path="/topshows" element={<TopShowsPage Theme={theme} isMobile={isMobile} isTablet={isTablet}/>} />
             <Route path="/profile" element={<Profile />} />
           </Routes>
         </Box>

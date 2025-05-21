@@ -110,7 +110,7 @@ const topShows = [
   },
 ];
 
-export default function PodcastLanding({ theme, isMobile, isTablet }) {
+export default function PodcastLanding({ Theme, isMobile, isTablet }) {
   const navigate = useNavigate();
 
   const handleGenreClick = (genreName) => {
@@ -130,7 +130,7 @@ export default function PodcastLanding({ theme, isMobile, isTablet }) {
     pauseOnHover: true,
     responsive: [
       {
-        breakpoint: theme.breakpoints.values.md,
+        breakpoint: Theme.breakpoints.values.md,
         settings: {
           slidesToShow: 2,
           slidesToScroll: 2,
@@ -138,7 +138,7 @@ export default function PodcastLanding({ theme, isMobile, isTablet }) {
         }
       },
       {
-        breakpoint: theme.breakpoints.values.sm,
+        breakpoint: Theme.breakpoints.values.sm,
         settings: {
           slidesToShow: 1,
           slidesToScroll: 1,
@@ -149,7 +149,7 @@ export default function PodcastLanding({ theme, isMobile, isTablet }) {
   };
 
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={Theme}>
       <CssBaseline />
       <Box sx={{ minHeight: '100vh', bgcolor: 'background.default' }}>
         {/* Navigation Bar - Responsive */}
@@ -159,18 +159,18 @@ export default function PodcastLanding({ theme, isMobile, isTablet }) {
           mb: isMobile ? 4 : 6,
           position: 'relative',
           overflow: 'hidden',
-          background: theme.palette.mode === 'dark'
+          background: Theme.palette.mode === 'dark'
             ? `linear-gradient(
         -45deg,
-        ${theme.palette.primary.main}20,
-        ${theme.palette.secondary.main}20,
-        ${theme.palette.background.default}
+        ${Theme.palette.primary.main}20,
+        ${Theme.palette.secondary.main}20,
+        ${Theme.palette.background.default}
       )`
             : `linear-gradient(
         -45deg,
-        ${theme.palette.primary.light}15,
-        ${theme.palette.secondary.light}15,
-        ${theme.palette.background.default}
+        ${Theme.palette.primary.light}15,
+        ${Theme.palette.secondary.light}15,
+        ${Theme.palette.background.default}
       )`,
           '&::before': {
             content: '""',
@@ -182,7 +182,7 @@ export default function PodcastLanding({ theme, isMobile, isTablet }) {
             background: `linear-gradient(
       45deg,
       transparent 25%,
-      ${theme.palette.primary.main}${theme.palette.mode === 'dark' ? '10' : '05'} 50%,
+      ${Theme.palette.primary.main}${Theme.palette.mode === 'dark' ? '10' : '05'} 50%,
       transparent 75%
     )`,
             animation: 'shimmer 20s linear infinite',
@@ -202,14 +202,14 @@ export default function PodcastLanding({ theme, isMobile, isTablet }) {
                     mb: 3,
                     fontSize: isMobile ? '2rem' : '3rem',
                     background: `linear-gradient(45deg, 
-              ${theme.palette.primary.main} 30%, 
-              ${theme.palette.secondary.main} 90%)`,
+              ${Theme.palette.primary.main} 30%, 
+              ${Theme.palette.secondary.main} 90%)`,
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
-                    textShadow: theme.palette.mode === 'dark'
+                    textShadow: Theme.palette.mode === 'dark'
                       ? '0 0 20px rgba(103,58,183,0.3)'
                       : 'none',
-                    animation: theme.palette.mode === 'dark'
+                    animation: Theme.palette.mode === 'dark'
                       ? 'textGlow 3s ease-in-out infinite alternate'
                       : 'none',
                     '@keyframes textGlow': {
@@ -235,8 +235,8 @@ export default function PodcastLanding({ theme, isMobile, isTablet }) {
                       left: 0,
                       width: '60px',
                       height: '2px',
-                      background: theme.palette.primary.main,
-                      opacity: theme.palette.mode === 'dark' ? 1 : 0.8,
+                      background: Theme.palette.primary.main,
+                      opacity: Theme.palette.mode === 'dark' ? 1 : 0.8,
                       animation: 'lineGrow 1.5s ease-out',
                       '@keyframes lineGrow': {
                         '0%': { width: 0 },
@@ -255,18 +255,18 @@ export default function PodcastLanding({ theme, isMobile, isTablet }) {
                     size={isMobile ? 'medium' : 'large'}
                     sx={{
                       backdropFilter: 'blur(10px)',
-                      background: theme.palette.mode === 'dark'
+                      background: Theme.palette.mode === 'dark'
                         ? 'rgba(103,58,183,0.2)'
                         : 'rgba(103,58,183,0.7)',
-                      border: theme.palette.mode === 'dark'
+                      border: Theme.palette.mode === 'dark'
                         ? '1px solid rgba(255,255,255,0.1)'
                         : '1px solid rgba(103,58,183,0.2)',
                       transition: 'all 0.3s',
                       '&:hover': {
                         transform: 'translateY(-2px)',
-                        boxShadow: theme.palette.mode === 'dark'
-                          ? `0 8px 32px ${theme.palette.primary.main}40`
-                          : `0 8px 32px ${theme.palette.primary.main}20`
+                        boxShadow: Theme.palette.mode === 'dark'
+                          ? `0 8px 32px ${Theme.palette.primary.main}40`
+                          : `0 8px 32px ${Theme.palette.primary.main}20`
                       }
                     }}
                   >
@@ -276,15 +276,15 @@ export default function PodcastLanding({ theme, isMobile, isTablet }) {
                     variant="outlined"
                     size={isMobile ? 'medium' : 'large'}
                     sx={{
-                      borderColor: theme.palette.mode === 'dark'
+                      borderColor: Theme.palette.mode === 'dark'
                         ? 'rgba(255,255,255,0.2)'
-                        : theme.palette.divider,
+                        : Theme.palette.divider,
                       color: 'text.primary',
                       '&:hover': {
-                        borderColor: theme.palette.primary.main,
-                        backgroundColor: theme.palette.mode === 'dark'
-                          ? `${theme.palette.primary.main}10`
-                          : `${theme.palette.primary.light}10`
+                        borderColor: Theme.palette.primary.main,
+                        backgroundColor: Theme.palette.mode === 'dark'
+                          ? `${Theme.palette.primary.main}10`
+                          : `${Theme.palette.primary.light}10`
                       }
                     }}
                   >
@@ -303,10 +303,10 @@ export default function PodcastLanding({ theme, isMobile, isTablet }) {
                 position: 'absolute',
                 width: 20,
                 height: 20,
-                background: `radial-gradient(${theme.palette.primary.main}, transparent)`,
+                background: `radial-gradient(${Theme.palette.primary.main}, transparent)`,
                 borderRadius: '50%',
                 animation: `float ${15 + index}s linear infinite`,
-                opacity: theme.palette.mode === 'dark' ? 1 : 0.2,
+                opacity: Theme.palette.mode === 'dark' ? 1 : 0.2,
                 top: `${Math.random() * 100}%`,
                 left: `${Math.random() * 100}%`,
                 '@keyframes float': {
@@ -337,7 +337,7 @@ export default function PodcastLanding({ theme, isMobile, isTablet }) {
                 transform: 'translateX(-50%)',
                 width: '80px',
                 height: '4px',
-                background: `linear-gradient(90deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
+                background: `linear-gradient(90deg, ${Theme.palette.primary.main} 0%, ${Theme.palette.secondary.main} 100%)`,
                 borderRadius: '2px'
               }
             }}
@@ -398,7 +398,7 @@ export default function PodcastLanding({ theme, isMobile, isTablet }) {
                 transform: 'translateX(-50%)',
                 width: '80px',
                 height: '4px',
-                background: `linear-gradient(90deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
+                background: `linear-gradient(90deg, ${Theme.palette.primary.main} 0%, ${Theme.palette.secondary.main} 100%)`,
                 borderRadius: '2px'
               }
             }}
@@ -415,7 +415,7 @@ export default function PodcastLanding({ theme, isMobile, isTablet }) {
               bottom: isMobile ? -30 : -40
             },
             '& .slick-dots li button:before': {
-              color: theme.palette.primary.main
+              color: Theme.palette.primary.main
             },
             '& .slick-track': {
               display: 'flex',
@@ -432,7 +432,7 @@ export default function PodcastLanding({ theme, isMobile, isTablet }) {
               {topShows.map((show) => (
                 <Box key={show.title} sx={{ padding: isMobile ? 1 : 2, height: '100%' }}>
                   <Card sx={{
-                    background: theme.palette.background.paper,
+                    background: Theme.palette.background.paper,
                     display: 'flex',
                     flexDirection: 'column',
                     height: '100%',
@@ -549,10 +549,10 @@ export default function PodcastLanding({ theme, isMobile, isTablet }) {
                 width: '80px',
                 height: '4px',
                 background: `linear-gradient(90deg, 
-          ${theme.palette.primary.main} 0%, 
-          ${theme.palette.secondary.main} 100%)`,
+          ${Theme.palette.primary.main} 0%, 
+          ${Theme.palette.secondary.main} 100%)`,
                 borderRadius: '2px',
-                opacity: theme.palette.mode === 'dark' ? 1 : 0.8
+                opacity: Theme.palette.mode === 'dark' ? 1 : 0.8
               }
             }}
           >
@@ -569,7 +569,7 @@ export default function PodcastLanding({ theme, isMobile, isTablet }) {
               alignItems: 'stretch'
             },
             '& .slick-dots li button:before': {
-              color: theme.palette.primary.main
+              color: Theme.palette.primary.main
             },
             '& .slick-slide': {
               height: 'auto',
@@ -584,14 +584,14 @@ export default function PodcastLanding({ theme, isMobile, isTablet }) {
               slidesToScroll: isMobile ? 1 : 2,
               responsive: [
                 {
-                  breakpoint: theme.breakpoints.values.lg,
+                  breakpoint: Theme.breakpoints.values.lg,
                   settings: {
                     slidesToShow: 3,
                     slidesToScroll: 2
                   }
                 },
                 {
-                  breakpoint: theme.breakpoints.values.md,
+                  breakpoint: Theme.breakpoints.values.md,
                   settings: {
                     slidesToShow: 2,
                     slidesToScroll: 2,
@@ -599,7 +599,7 @@ export default function PodcastLanding({ theme, isMobile, isTablet }) {
                   }
                 },
                 {
-                  breakpoint: theme.breakpoints.values.sm,
+                  breakpoint: Theme.breakpoints.values.sm,
                   settings: {
                     slidesToShow: 1,
                     slidesToScroll: 1,
@@ -621,13 +621,13 @@ export default function PodcastLanding({ theme, isMobile, isTablet }) {
                     display: 'flex',
                     flexDirection: 'column',
                     transition: 'transform 0.2s, box-shadow 0.2s',
-                    background: theme.palette.background.paper,
-                    border: `1px solid ${theme.palette.divider}`,
+                    background: Theme.palette.background.paper,
+                    border: `1px solid ${Theme.palette.divider}`,
                     '&:hover': {
                       transform: 'translateY(-8px)',
-                      boxShadow: theme.palette.mode === 'dark'
-                        ? `0 8px 32px ${theme.palette.primary.main}30`
-                        : `0 8px 24px ${theme.palette.primary.main}15`
+                      boxShadow: Theme.palette.mode === 'dark'
+                        ? `0 8px 32px ${Theme.palette.primary.main}30`
+                        : `0 8px 24px ${Theme.palette.primary.main}15`
                     }
                   }}>
                     <CardMedia
@@ -645,42 +645,42 @@ export default function PodcastLanding({ theme, isMobile, isTablet }) {
                           right: 0,
                           bottom: 0,
                           background: `linear-gradient(45deg, 
-                    ${theme.palette.primary.main}${theme.palette.mode === 'dark' ? '30' : '15'}, 
-                    ${theme.palette.secondary.main}${theme.palette.mode === 'dark' ? '30' : '15'})`,
-                          mixBlendMode: theme.palette.mode === 'dark' ? 'soft-light' : 'multiply'
+                    ${Theme.palette.primary.main}${Theme.palette.mode === 'dark' ? '30' : '15'}, 
+                    ${Theme.palette.secondary.main}${Theme.palette.mode === 'dark' ? '30' : '15'})`,
+                          mixBlendMode: Theme.palette.mode === 'dark' ? 'soft-light' : 'multiply'
                         }
                       }}
                     />
                     <CardContent sx={{
                       flexGrow: 1,
                       p: isMobile ? 1.5 : 2,
-                      background: theme.palette.mode === 'dark'
+                      background: Theme.palette.mode === 'dark'
                         ? `linear-gradient(180deg, 
-                    ${theme.palette.primary.light}05, 
-                    ${theme.palette.primary.main}15)`
+                    ${Theme.palette.primary.light}05, 
+                    ${Theme.palette.primary.main}15)`
                         : `linear-gradient(180deg, 
-                    ${theme.palette.primary.light}03, 
-                    ${theme.palette.primary.light}08)`
+                    ${Theme.palette.primary.light}03, 
+                    ${Theme.palette.primary.light}08)`
                     }}>
                       <Typography gutterBottom variant="h6" component="div">
                         {show.title}
                       </Typography>
                       <Stack direction="row" spacing={1} sx={{ mb: 1, flexWrap: 'wrap' }}>
                         <Typography variant="caption" sx={{
-                          background: theme.palette.action.hover,
+                          background: Theme.palette.action.hover,
                           px: 1,
                           borderRadius: 1,
-                          color: theme.palette.mode === 'dark'
+                          color: Theme.palette.mode === 'dark'
                             ? 'primary.light'
                             : 'primary.dark'
                         }}>
                           New Episode
                         </Typography>
                         <Typography variant="caption" sx={{
-                          background: theme.palette.action.hover,
+                          background: Theme.palette.action.hover,
                           px: 1,
                           borderRadius: 1,
-                          color: theme.palette.mode === 'dark'
+                          color: Theme.palette.mode === 'dark'
                             ? 'secondary.light'
                             : 'secondary.dark'
                         }}>
@@ -696,19 +696,19 @@ export default function PodcastLanding({ theme, isMobile, isTablet }) {
                       display: 'flex',
                       justifyContent: 'space-between',
                       alignItems: 'center',
-                      background: theme.palette.action.selected
+                      background: Theme.palette.action.selected
                     }}>
                       <Button
                         startIcon={<PlayArrow />}
                         size="small"
                         sx={{
                           background: `linear-gradient(45deg, 
-                    ${theme.palette.primary.main} 0%, 
-                    ${theme.palette.secondary.main} 100%)`,
-                          color: theme.palette.primary.contrastText,
+                    ${Theme.palette.primary.main} 0%, 
+                    ${Theme.palette.secondary.main} 100%)`,
+                          color: Theme.palette.primary.contrastText,
                           '&:hover': {
                             transform: 'scale(1.05)',
-                            boxShadow: `0 4px 12px ${theme.palette.primary.main}30`
+                            boxShadow: `0 4px 12px ${Theme.palette.primary.main}30`
                           }
                         }}
                       >
@@ -743,7 +743,7 @@ export default function PodcastLanding({ theme, isMobile, isTablet }) {
                 transform: 'translateX(-50%)',
                 width: '120px',
                 height: '2px',
-                background: `linear-gradient(90deg, transparent 0%, ${theme.palette.primary.main} 50%, transparent 100%)`,
+                background: `linear-gradient(90deg, transparent 0%, ${Theme.palette.primary.main} 50%, transparent 100%)`,
                 opacity: 0.6
               }
             }}
@@ -759,7 +759,7 @@ export default function PodcastLanding({ theme, isMobile, isTablet }) {
                   alignItems: "center",
                   p: 2,
                   minHeight: 240,
-                  background: theme.palette.background.paper,
+                  background: Theme.palette.background.paper,
                   backdropFilter: 'blur(12px)',
                   border: '1px solid rgba(236, 226, 226, 0.1)',
                   position: 'relative',
@@ -767,7 +767,7 @@ export default function PodcastLanding({ theme, isMobile, isTablet }) {
                   transition: 'all 0.3s ease',
                   '&:hover': {
                     transform: 'translateY(-4px)',
-                    boxShadow: `0 8px 24px ${theme.palette.primary.main}20`
+                    boxShadow: `0 8px 24px ${Theme.palette.primary.main}20`
                   },
                   '&::before': {
                     content: '""',
@@ -777,7 +777,7 @@ export default function PodcastLanding({ theme, isMobile, isTablet }) {
                     width: '200%',
                     height: '200%',
                     background: `radial-gradient(circle at 50% 50%, 
-              ${theme.palette.primary.main}10 0%, 
+              ${Theme.palette.primary.main}10 0%, 
               transparent 70%)`,
                     animation: 'floatEffect 15s infinite linear'
                   }
@@ -804,8 +804,8 @@ export default function PodcastLanding({ theme, isMobile, isTablet }) {
                       mb: 1,
                       fontWeight: 600,
                       background: `linear-gradient(45deg, 
-                ${theme.palette.primary.light}, 
-                ${theme.palette.secondary.light})`,
+                ${Theme.palette.primary.light}, 
+                ${Theme.palette.secondary.light})`,
                       WebkitBackgroundClip: 'text',
                       WebkitTextFillColor: 'transparent'
                     }}>

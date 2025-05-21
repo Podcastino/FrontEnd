@@ -12,9 +12,7 @@ import {
   IconButton,
   Typography,
   ThemeProvider,
-  createTheme,
   CssBaseline,
-  useMediaQuery
 } from '@mui/material';
 import {
   PlayArrow,
@@ -24,28 +22,8 @@ import {
   People
 } from '@mui/icons-material';
 
-const theme = createTheme({
-  palette: {
-    mode: 'dark',
-    primary: { main: '#673ab7' },
-    secondary: { main: '#ff4081' },
-    background: { default: '#121212', paper: '#1e1e1e' },
-  },
-  breakpoints: {
-    values: {
-      xs: 0,
-      sm: 600,
-      md: 900,
-      lg: 1200,
-      xl: 1536,
-    },
-  },
-});
-
-const TopShowsPage = () => {
+export default function TopShowsPage ({Theme, isMobile, isTablet}) {
   const [activeTab, setActiveTab] = useState('weekly');
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
   
   // Create refs for each section
   const weeklyRef = useRef(null);
@@ -162,83 +140,10 @@ const TopShowsPage = () => {
   ];
 
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={Theme}>
       <CssBaseline />
       <Container maxWidth="xl" sx={{ py: isMobile ? 2 : 4 }}>
         {/* Header */}
-        <Box sx={{ mb: isMobile ? 4 : 6, textAlign: 'center' }}>
-          <Typography variant={isMobile ? 'h3' : 'h2'} sx={{ 
-            fontWeight: 800,
-            background: `linear-gradient(45deg, ${theme.palette.primary.main} 30%, ${theme.palette.secondary.main} 90%)`,
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            mb: 2,
-            fontSize: isMobile ? '2rem' : '3rem'
-          }}>
-            Top Podcasts
-          </Typography>
-          
-          <Box sx={{ 
-            display: 'flex', 
-            justifyContent: 'center', 
-            gap: 1, 
-            mb: 4,
-            flexWrap: isMobile ? 'wrap' : 'nowrap'
-          }}>
-            <Button
-              variant={activeTab === 'weekly' ? 'contained' : 'outlined'}
-              onClick={() => scrollToRef(weeklyRef)}
-              sx={{ 
-                textTransform: 'none',
-                fontSize: isMobile ? '0.75rem' : '0.875rem',
-                px: isMobile ? 1 : 2,
-                py: isMobile ? 0.5 : 1
-              }}
-              size={isMobile ? 'small' : 'medium'}
-            >
-              Weekly
-            </Button>
-            <Button
-              variant={activeTab === 'monthly' ? 'contained' : 'outlined'}
-              onClick={() => scrollToRef(monthlyRef)}
-              sx={{ 
-                textTransform: 'none',
-                fontSize: isMobile ? '0.75rem' : '0.875rem',
-                px: isMobile ? 1 : 2,
-                py: isMobile ? 0.5 : 1
-              }}
-              size={isMobile ? 'small' : 'medium'}
-            >
-              Monthly
-            </Button>
-            <Button
-              variant={activeTab === 'yearly' ? 'contained' : 'outlined'}
-              onClick={() => scrollToRef(yearlyRef)}
-              sx={{ 
-                textTransform: 'none',
-                fontSize: isMobile ? '0.75rem' : '0.875rem',
-                px: isMobile ? 1 : 2,
-                py: isMobile ? 0.5 : 1
-              }}
-              size={isMobile ? 'small' : 'medium'}
-            >
-              Yearly
-            </Button>
-            <Button
-              variant={activeTab === 'subscribers' ? 'contained' : 'outlined'}
-              onClick={() => scrollToRef(subscribersRef)}
-              sx={{ 
-                textTransform: 'none',
-                fontSize: isMobile ? '0.75rem' : '0.875rem',
-                px: isMobile ? 1 : 2,
-                py: isMobile ? 0.5 : 1
-              }}
-              size={isMobile ? 'small' : 'medium'}
-            >
-              Subscribers
-            </Button>
-          </Box>
-        </Box>
 
         {/* Ranking Sections */}
         {rankingSections.map((section) => (
@@ -261,7 +166,7 @@ const TopShowsPage = () => {
             }}>
               <IconButton sx={{ 
                 color: 'primary.main',
-                backgroundColor: theme.palette.primary.main + '20',
+                backgroundColor: Theme.palette.primary.main + '20',
                 borderRadius: 2,
                 p: isMobile ? 0.5 : 1
               }}>
@@ -323,7 +228,7 @@ const TopShowsPage = () => {
                             left: 0,
                             right: 0,
                             bottom: 0,
-                            background: `linear-gradient(180deg, transparent 0%, ${theme.palette.background.default} 100%)`
+                            background: `linear-gradient(180deg, transparent 0%, ${Theme.palette.background.default} 100%)`
                           }
                         }}
                       />
@@ -412,5 +317,3 @@ const TopShowsPage = () => {
     </ThemeProvider>
   );
 };
-
-export default TopShowsPage;
