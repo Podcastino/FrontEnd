@@ -3,3 +3,16 @@ body {
   font-family: 'Roboto', sans-serif;
   background-color: #f5f5f5;
 }
+@font-face {
+  font-family: 'Nanum pen';
+  font-style: normal;
+  font-weight: 400;
+  src: url('./assets/fonts/NanumPenScript-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 400;
+  src: url('./assets/fonts/Montserrat-Regular.ttf') format('truetype');
+}

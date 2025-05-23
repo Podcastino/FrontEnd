@@ -20,7 +20,6 @@ const borderSx = {
 };
 
 export default function Login() {
-  // State variables for input fields and error messages
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -50,7 +49,7 @@ export default function Login() {
     }
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/login/", {
+      const response = await fetch("https://podcastino.darkube.app/api/login/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
