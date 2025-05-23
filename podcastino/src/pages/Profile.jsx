@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import FileUploadDialog from "./Modals/uploaddialog";
 import { fetchUserProfile } from './api/userService'
-import ProfileMenu from './Modals/ProfileMenu'
+import { myShows } from './Data/Mockdata';
 import {
   Avatar,
   Box,
   Button,
   Card,
   CardContent,
-  AppBar,
-  Stack,
   Chip,
   Container,
   Divider,
@@ -24,7 +22,6 @@ import {
   Typography,
   TextField,
   ThemeProvider,
-  createTheme,
   CssBaseline,
   Grid,
   CardMedia,
@@ -36,37 +33,18 @@ import {
   History,
   PlaylistPlay,
   Podcasts,
-  MoreVert,
-  Upload as UploadIcon,
-  Search,
   Share,
   LibraryBooks as ShowsIcon
 } from '@mui/icons-material';
 
-// Deep Purple Theme
-const theme = createTheme({
-  palette: {
-    mode: 'dark',
-    primary: {
-      main: '#673ab7',
-    },
-    secondary: {
-      main: '#ff4081',
-    },
-    background: {
-      default: '#121212',
-      paper: '#1e1e1e',
-    },
-  },
-});
 
-const UserProfilePage = () => {
+function UserProfilePage ({Theme, isMoblie, isTablet}) {
   const [tabValue, setTabValue] = useState(0);
   const [isEditing, setIsEditing] = useState(false);
   const [uploadDialogOpen, setUploadDialogOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [open, setOpen] = useState(false);
+  // const [anchorEl, setAnchorEl] = useState(null);
+  // const [open, setOpen] = useState(false);
 
   const [userData, setUserData] = useState({
     name: '',
@@ -104,34 +82,6 @@ const UserProfilePage = () => {
     { id: 2, title: 'Building Sustainable Startups', podcast: 'Business Insights', duration: '38:45' }
   ];
 
-  // Sample data for My Shows tab
-  const myShows = [
-    {
-      id: 1,
-      title: 'TechTalk',
-      description: 'Weekly discussions about technology and innovation',
-      episodes: 42,
-      subscribers: 12500,
-      image: 'https://via.placeholder.com/150/673ab7/ffffff?text=TechTalk'
-    },
-    {
-      id: 2,
-      title: 'Business Insights',
-      description: 'Interviews with business leaders and entrepreneurs',
-      episodes: 28,
-      subscribers: 8700,
-      image: 'https://via.placeholder.com/150/2196f3/ffffff?text=Business'
-    },
-    {
-      id: 3,
-      title: 'Science Weekly',
-      description: 'Exploring the latest scientific discoveries',
-      episodes: 15,
-      subscribers: 5400,
-      image: 'https://via.placeholder.com/150/4caf50/ffffff?text=Science'
-    }
-  ];
-
   const handleTabChange = (event, newValue) => {
     setTabValue(newValue);
   };
@@ -144,10 +94,10 @@ const UserProfilePage = () => {
     setUploadDialogOpen(false);
   };
 
-  const handleAvatarClick = (event) => {
-    setAnchorEl(event.currentTarget);
-    setOpen(true); // Open the menu
-  };
+  // const handleAvatarClick = (event) => {
+  //   setAnchorEl(event.currentTarget);
+  //   setOpen(true); // Open the menu
+  // };
 
   const handleEditClick = () => {
     setIsEditing(true);
@@ -163,16 +113,16 @@ const UserProfilePage = () => {
     setIsEditing(false);
   };
 
-  // Handle menu close
-  const handleMenuClose = () => {
-    setOpen(false);
-  };
+  // // Handle menu close
+  // const handleMenuClose = () => {
+  //   setOpen(false);
+  // };
 
-  // Handle sign out (remove token)
-  const handleSignOut = () => {
-    localStorage.removeItem('access_token'); // Remove access token
-    setIsLoggedIn(false); // Set login state to false
-  };
+  // // Handle sign out (remove token)
+  // const handleSignOut = () => {
+  //   localStorage.removeItem('access_token'); // Remove access token
+  //   setIsLoggedIn(false); // Set login state to false
+  // };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -200,57 +150,8 @@ const UserProfilePage = () => {
   }, []);
 
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={Theme}>
       <CssBaseline />
-      <AppBar position="sticky" color="default" elevation={1}>
-      <Container maxWidth="xl">
-        <Stack direction="row" alignItems="center" py={2}>
-          <Typography variant="h4" sx={{ fontWeight: 700, mr: 4, color: 'primary.main' }}>
-            PODCASTINO
-          </Typography>
-
-          <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 3 }}>
-            <Button color="inherit">Discover</Button>
-            <Button color="inherit">Genres</Button>
-            <Button color="inherit">Top Shows</Button>
-          </Box>
-
-          <Box sx={{ flexGrow: 1 }} />
-
-          <TextField
-            size="small"
-            placeholder="Search podcasts..."
-            InputProps={{
-              startAdornment: <Search sx={{ mr: 1 }} />,
-            }}
-            sx={{ width: 250, mr: 2, display: { xs: 'none', sm: 'block' } }}
-          />
-
-          {/* Conditional rendering based on login state */}
-          {isLoggedIn ? (
-            <Avatar
-              sx={{ width: 40, height: 40, cursor: 'pointer' }}
-              alt="User Avatar"
-              src="https://randomuser.me/api/portraits/men/32.jpg"
-              onClick={handleAvatarClick} // Add onClick handler for avatar
-            />
-          ) : (
-            <Button href="/signup" variant="contained" color="primary" sx={{ mr: 2 }}>
-              Sign In
-            </Button>
-          )}
-        </Stack>
-      </Container>
-
-      {/* Profile Menu Pop-up */}
-      <ProfileMenu
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleMenuClose}
-        onSignOut={handleSignOut}
-        userData={userData}
-      />
-    </AppBar>
 
       {/* File Upload Dialog */}
       <FileUploadDialog

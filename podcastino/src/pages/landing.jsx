@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import { useNavigate } from 'react-router-dom';
+import React from "react";
+import { useNavigate, Link } from 'react-router-dom';
+import { topShows, genres } from './Data/Mockdata';
 import {
-  AppBar,
   Box,
   Button,
   Card,
@@ -12,202 +12,26 @@ import {
   Grid,
   IconButton,
   Stack,
-  TextField,
   Typography,
   ThemeProvider,
-  createTheme,
-  CssBaseline,
-  useMediaQuery,
-  Toolbar,
-  Menu,
-  MenuItem,
-  Slide,
-  Dialog,
-  DialogContent,
-  InputAdornment
+  CssBaseline
 } from "@mui/material";
 import {
-  Search,
   PlayArrow,
   FavoriteBorder,
   FiberManualRecord,
-  Menu as MenuIcon,
-  Close,
 } from "@mui/icons-material";
-
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { Brightness4, Brightness7 } from "@mui/icons-material";
 
-// Rest of your code remains the same...
-// [Keep all your existing theme configuration, sample data, and component code]
-// Deep Purple Theme
-// Replace the existing theme configuration with this
-const getDesignTokens = (mode) => ({
-  palette: {
-    mode,
-    primary: {
-      main: '#673ab7',
-      light: '#9a67ea',
-      dark: '#320b86',
-    },
-    secondary: {
-      main: '#ff4081',
-    },
-    ...(mode === 'dark' ? {
-      background: {
-        default: '#121212',
-        paper: '#1e1e1e',
-      },
-    } : {
-      background: {
-        default: '#f8f9fa',
-        paper: '#ffffff',
-      },
-    }),
-    text: {
-      ...(mode === 'dark' ? {
-        primary: '#ffffff',
-        secondary: 'rgba(255, 255, 255, 0.7)',
-      } : {
-        primary: 'rgba(0, 0, 0, 0.87)',
-        secondary: 'rgba(0, 0, 0, 0.6)',
-      }),
-    }
-  },
-  breakpoints: {
-    values: {
-      xs: 0,
-      sm: 600,
-      md: 900,
-      lg: 1200,
-      xl: 1536,
-    },
-  },
-});
-
-// Sample data
-const genres = [
-  { name: "True Crime", color: "#ff5252" },
-  { name: "Comedy", color: "#ffeb3b" },
-  { name: "News", color: "#4caf50" },
-  { name: "Business", color: "#2196f3" },
-  { name: "Technology", color: "#9c27b0" },
-  { name: "Health", color: "#00bcd4" },
-];
-
-const topShows = [
-  {
-    title: "Serial",
-    host: "Sarah Koenig",
-    category: "True Crime",
-    listeners: "2.5M",
-    image: "https://via.placeholder.com/300x300/ff5252/ffffff?text=Serial"
-  },
-  {
-    title: "The Daily",
-    host: "The New York Times",
-    category: "News",
-    listeners: "1.8M",
-    image: "https://via.placeholder.com/300x300/4caf50/ffffff?text=The+Daily"
-  },
-  {
-    title: "How I Built This",
-    host: "Guy Raz",
-    category: "Business",
-    listeners: "1.2M",
-    image: "https://via.placeholder.com/300x300/2196f3/ffffff?text=How+I+Built+This"
-  },
-  {
-    title: "Science Vs",
-    host: "Wendy Zukerman",
-    category: "Science",
-    listeners: "950K",
-    image: "https://via.placeholder.com/300x300/00bcd4/ffffff?text=Science+Vs"
-  },
-  {
-    title: "Radiolab",
-    host: "Jad Abumrad",
-    category: "Science",
-    listeners: "1.1M",
-    image: "https://via.placeholder.com/300x300/9c27b0/ffffff?text=Radiolab"
-  },
-  {
-    title: "The Joe Rogan Experience",
-    host: "Joe Rogan",
-    category: "Talk",
-    listeners: "3.5M",
-    image: "https://via.placeholder.com/300x300/ff9800/ffffff?text=Joe+Rogan"
-  },
-  {
-    title: "Serial",
-    host: "Sarah Koenig",
-    category: "True Crime",
-    listeners: "2.5M",
-    image: "https://via.placeholder.com/300x300/ff5252/ffffff?text=Serial"
-  }, {
-    title: "Serial",
-    host: "Sarah Koenig",
-    category: "True Crime",
-    listeners: "2.5M",
-    image: "https://via.placeholder.com/300x300/ff5252/ffffff?text=Serial"
-  }, {
-    title: "Serial",
-    host: "Sarah Koenig",
-    category: "True Crime",
-    listeners: "2.5M",
-    image: "https://via.placeholder.com/300x300/ff5252/ffffff?text=Serial"
-  }, {
-    title: "Serial",
-    host: "Sarah Koenig",
-    category: "True Crime",
-    listeners: "2.5M",
-    image: "https://via.placeholder.com/300x300/ff5252/ffffff?text=Serial"
-  },
-];
-
-const PodcastLanding = () => {
+export default function PodcastLanding({ Theme, isMobile, isTablet, isLoggedIn }) {
   const navigate = useNavigate();
-  const [mode, setMode] = useState('dark');
-  const theme = React.useMemo(() => createTheme(getDesignTokens(mode)), [mode]);
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [searchOpen, setSearchOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
-  const open = Boolean(anchorEl);
-  const colorMode = React.useMemo(
-    () => ({
-      toggleColorMode: () => {
-        setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
-      },
-    }),
-    [],
-  );
-
-
-
-  const handleMenuClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-  };
 
   const handleGenreClick = (genreName) => {
-    navigate('/shows', {
+    navigate('/generes', {
       state: { selectedGenre: genreName }
     });
-  };
-
-  const handleSearchOpen = () => {
-    setSearchOpen(true);
-  };
-
-  const handleSearchClose = () => {
-    setSearchOpen(false);
   };
 
   const sliderSettings = {
@@ -219,11 +43,9 @@ const PodcastLanding = () => {
     autoplay: true,
     autoplaySpeed: 5000,
     pauseOnHover: true,
-    // nextArrow: <SampleNextArrow />,
-    // prevArrow: <SamplePrevArrow />,
     responsive: [
       {
-        breakpoint: theme.breakpoints.values.md,
+        breakpoint: Theme.breakpoints.values.md,
         settings: {
           slidesToShow: 2,
           slidesToScroll: 2,
@@ -231,7 +53,7 @@ const PodcastLanding = () => {
         }
       },
       {
-        breakpoint: theme.breakpoints.values.sm,
+        breakpoint: Theme.breakpoints.values.sm,
         settings: {
           slidesToShow: 1,
           slidesToScroll: 1,
@@ -242,211 +64,27 @@ const PodcastLanding = () => {
   };
 
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={Theme}>
       <CssBaseline />
       <Box sx={{ minHeight: '100vh', bgcolor: 'background.default' }}>
-        {/* Navigation Bar - Responsive */}
-        <AppBar position="sticky" color="default" elevation={1}>
-          <Container maxWidth="xl">
-            <Toolbar disableGutters>
-              {isMobile ? (
-                <>
-                  <IconButton
-                    size="large"
-                    edge="end"
-                    color="inherit"
-                    aria-label="menu"
-                    onClick={handleMenuClick}
-                    sx={{ marginRight: 0, padding: 0 }}
-                  >
-                    <MenuIcon />
-                  </IconButton>
-                  <Menu
-                    anchorEl={anchorEl}
-                    open={open}
-                    onClose={handleMenuClose}
-                  >
-                    <MenuItem onClick={handleMenuClose}>Discover</MenuItem>
-                    <MenuItem onClick={handleMenuClose}>Genres</MenuItem>
-                    <MenuItem onClick={handleMenuClose}>Top Shows</MenuItem>
-                  </Menu>
-                </>
-              ) : (
-                <>
-                </>
-              )}
-              <Typography
-                variant="h4"
-                sx={{
-                  fontWeight: 900,
-                  ml: isMobile ? 1 : 0,
-                  mr: isMobile ? 0 : 4,
-                  fontSize: isMobile ? '1.25rem' : '2.125rem',
-                  background: `
-      linear-gradient(
-        135deg,
-        ${theme.palette.primary.main} 25%,
-        ${theme.palette.secondary.main} 50%,
-        ${theme.palette.primary.light} 75%
-      )
-    `,
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  position: 'relative',
-                  animation: 'dreamyEffect 4s ease-in-out infinite',
-                  textShadow: mode === 'dark' ? `
-      0 0 10px ${theme.palette.primary.main}30,
-      0 0 20px ${theme.palette.secondary.main}20,
-      0 0 30px ${theme.palette.primary.light}10
-    ` : 'none',
-                  '@keyframes dreamyEffect': {
-                    '0%, 100%': {
-                      filter: 'blur(0.2px)',
-                      textShadow: mode === 'dark' ? `
-          0 0 10px ${theme.palette.primary.main}30,
-          0 0 20px ${theme.palette.secondary.main}20,
-          0 0 30px ${theme.palette.primary.light}10
-        ` : 'none'
-                    },
-                    '50%': {
-                      filter: 'blur(0.5px)',
-                      textShadow: mode === 'dark' ? `
-          0 0 20px ${theme.palette.primary.main}50,
-          0 0 40px ${theme.palette.secondary.main}30,
-          0 0 60px ${theme.palette.primary.light}20
-        ` : 'none',
-                      backgroundPosition: '100% 50%'
-                    }
-                  }
-                }}
-              >
-                PODCASTINO
-              </Typography>
-
-              {!isMobile ? (
-                <Box sx={{ display: 'flex', gap: 3 }}>
-                  <Button color="inherit">Discover</Button>
-                  <Button color="inherit">Genres</Button>
-                  <Button color="inherit">Top Shows</Button>
-                </Box>
-              ) : (
-                <>
-                </>
-              )}
-
-              <Box sx={{ flexGrow: 1 }} />
-
-              {!isMobile ? (
-                <TextField
-                  size="small"
-                  placeholder="Search podcasts..."
-                  InputProps={{
-                    startAdornment: <Search sx={{ mr: 1 }} />,
-                  }}
-                  sx={{
-                    width: isTablet ? 200 : 250,
-                    mr: 2
-                  }}
-                />
-              ) : (
-                <>
-                  <IconButton onClick={handleSearchOpen}>
-                    <Search />
-                  </IconButton>
-                  <Dialog
-                    fullScreen
-                    open={searchOpen}
-                    onClose={handleSearchClose}
-                    TransitionComponent={Slide}
-                    TransitionProps={{
-                      direction: 'down',
-                    }}
-                    PaperProps={{
-                      sx: {
-                        bgcolor: 'background.default',
-                        pt: 8
-                      }
-                    }}
-                  >
-                    <DialogContent>
-                      <Container maxWidth="sm">
-                        <TextField
-                          fullWidth
-                          autoFocus
-                          placeholder="Search podcasts..."
-                          value={searchQuery}
-                          onChange={(e) => setSearchQuery(e.target.value)}
-                          InputProps={{
-                            startAdornment: (
-                              <InputAdornment position="start">
-                                <Search />
-                              </InputAdornment>
-                            ),
-                            endAdornment: (
-                              <InputAdornment position="end">
-                                <IconButton onClick={handleSearchClose}>
-                                  <Close />
-                                </IconButton>
-                              </InputAdornment>
-                            ),
-                          }}
-                          sx={{
-                            '& .MuiOutlinedInput-root': {
-                              borderRadius: 4,
-                              height: 56
-                            }
-                          }}
-                        />
-                      </Container>
-                    </DialogContent>
-                  </Dialog>
-                </>
-              )}
-
-              <IconButton
-                onClick={colorMode.toggleColorMode}
-                color="inherit"
-                sx={{ mr: 1 }}
-              >
-                {mode === 'dark' ? <Brightness7 /> : <Brightness4 />}
-              </IconButton>
-
-              <Button
-                href="/signup"
-                variant="contained"
-                color="primary"
-                sx={{
-                  mr: 2,
-                  fontSize: isMobile ? '0.75rem' : '0.875rem',
-                  px: isMobile ? 1 : 2,
-                  py: isMobile ? 0.5 : 1
-                }}
-              >
-                Sign In
-              </Button>
-            </Toolbar>
-          </Container>
-        </AppBar>
-
-
         {/* Hero Section - Responsive */}
         <Box sx={{
           py: isMobile ? 6 : 10,
           mb: isMobile ? 4 : 6,
           position: 'relative',
           overflow: 'hidden',
-          background: theme.palette.mode === 'dark'
+          background: Theme.palette.mode === 'dark'
             ? `linear-gradient(
         -45deg,
-        ${theme.palette.primary.main}20,
-        ${theme.palette.secondary.main}20,
-        ${theme.palette.background.default}
+        ${Theme.palette.primary.main}20,
+        ${Theme.palette.secondary.main}20,
+        ${Theme.palette.background.default}
       )`
             : `linear-gradient(
         -45deg,
-        ${theme.palette.primary.light}15,
-        ${theme.palette.secondary.light}15,
-        ${theme.palette.background.default}
+        ${Theme.palette.primary.light}15,
+        ${Theme.palette.secondary.light}15,
+        ${Theme.palette.background.default}
       )`,
           '&::before': {
             content: '""',
@@ -458,7 +96,7 @@ const PodcastLanding = () => {
             background: `linear-gradient(
       45deg,
       transparent 25%,
-      ${theme.palette.primary.main}${theme.palette.mode === 'dark' ? '10' : '05'} 50%,
+      ${Theme.palette.primary.main}${Theme.palette.mode === 'dark' ? '10' : '05'} 50%,
       transparent 75%
     )`,
             animation: 'shimmer 20s linear infinite',
@@ -478,14 +116,14 @@ const PodcastLanding = () => {
                     mb: 3,
                     fontSize: isMobile ? '2rem' : '3rem',
                     background: `linear-gradient(45deg, 
-              ${theme.palette.primary.main} 30%, 
-              ${theme.palette.secondary.main} 90%)`,
+              ${Theme.palette.primary.main} 30%, 
+              ${Theme.palette.secondary.main} 90%)`,
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
-                    textShadow: theme.palette.mode === 'dark'
+                    textShadow: Theme.palette.mode === 'dark'
                       ? '0 0 20px rgba(103,58,183,0.3)'
                       : 'none',
-                    animation: theme.palette.mode === 'dark'
+                    animation: Theme.palette.mode === 'dark'
                       ? 'textGlow 3s ease-in-out infinite alternate'
                       : 'none',
                     '@keyframes textGlow': {
@@ -511,8 +149,8 @@ const PodcastLanding = () => {
                       left: 0,
                       width: '60px',
                       height: '2px',
-                      background: theme.palette.primary.main,
-                      opacity: theme.palette.mode === 'dark' ? 1 : 0.8,
+                      background: Theme.palette.primary.main,
+                      opacity: Theme.palette.mode === 'dark' ? 1 : 0.8,
                       animation: 'lineGrow 1.5s ease-out',
                       '@keyframes lineGrow': {
                         '0%': { width: 0 },
@@ -525,42 +163,49 @@ const PodcastLanding = () => {
                 </Typography>
 
                 <Stack direction={isMobile ? 'column' : 'row'} spacing={2}>
-                  <Button
+                  { isLoggedIn ? (
+                    <>
+                    </>
+                  ) : (
+                    <Button
                     variant="contained"
                     color="primary"
                     size={isMobile ? 'medium' : 'large'}
+                    onClick={() => navigate('/signup')}
                     sx={{
                       backdropFilter: 'blur(10px)',
-                      background: theme.palette.mode === 'dark'
+                      background: Theme.palette.mode === 'dark'
                         ? 'rgba(103,58,183,0.2)'
                         : 'rgba(103,58,183,0.7)',
-                      border: theme.palette.mode === 'dark'
+                      border: Theme.palette.mode === 'dark'
                         ? '1px solid rgba(255,255,255,0.1)'
                         : '1px solid rgba(103,58,183,0.2)',
                       transition: 'all 0.3s',
                       '&:hover': {
                         transform: 'translateY(-2px)',
-                        boxShadow: theme.palette.mode === 'dark'
-                          ? `0 8px 32px ${theme.palette.primary.main}40`
-                          : `0 8px 32px ${theme.palette.primary.main}20`
+                        boxShadow: Theme.palette.mode === 'dark'
+                          ? `0 8px 32px ${Theme.palette.primary.main}40`
+                          : `0 8px 32px ${Theme.palette.primary.main}20`
                       }
                     }}
                   >
                     Start Listening
                   </Button>
+                  )}
                   <Button
                     variant="outlined"
                     size={isMobile ? 'medium' : 'large'}
+                    onClick={() => { navigate('/topshows'); }}
                     sx={{
-                      borderColor: theme.palette.mode === 'dark'
+                      borderColor: Theme.palette.mode === 'dark'
                         ? 'rgba(255,255,255,0.2)'
-                        : theme.palette.divider,
+                        : Theme.palette.divider,
                       color: 'text.primary',
                       '&:hover': {
-                        borderColor: theme.palette.primary.main,
-                        backgroundColor: theme.palette.mode === 'dark'
-                          ? `${theme.palette.primary.main}10`
-                          : `${theme.palette.primary.light}10`
+                        borderColor: Theme.palette.primary.main,
+                        backgroundColor: Theme.palette.mode === 'dark'
+                          ? `${Theme.palette.primary.main}10`
+                          : `${Theme.palette.primary.light}10`
                       }
                     }}
                   >
@@ -579,10 +224,10 @@ const PodcastLanding = () => {
                 position: 'absolute',
                 width: 20,
                 height: 20,
-                background: `radial-gradient(${theme.palette.primary.main}, transparent)`,
+                background: `radial-gradient(${Theme.palette.primary.main}, transparent)`,
                 borderRadius: '50%',
                 animation: `float ${15 + index}s linear infinite`,
-                opacity: theme.palette.mode === 'dark' ? 1 : 0.2,
+                opacity: Theme.palette.mode === 'dark' ? 1 : 0.2,
                 top: `${Math.random() * 100}%`,
                 left: `${Math.random() * 100}%`,
                 '@keyframes float': {
@@ -613,7 +258,7 @@ const PodcastLanding = () => {
                 transform: 'translateX(-50%)',
                 width: '80px',
                 height: '4px',
-                background: `linear-gradient(90deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
+                background: `linear-gradient(90deg, ${Theme.palette.primary.main} 0%, ${Theme.palette.secondary.main} 100%)`,
                 borderRadius: '2px'
               }
             }}
@@ -622,10 +267,11 @@ const PodcastLanding = () => {
           </Typography>
           <Grid container spacing={isMobile ? 2 : 3}>
             {genres.map((genre) => (
-              <Grid item xs={6} sm={4} md={2} key={genre.name}>
+              <Grid item xs={6} sm={4} md={2} key={genre.name} sx={{margin: 'auto'}}>
                 <Box
                   onClick={() => handleGenreClick(genre.name)}
                   sx={{
+                    width: '10rem',
                     bgcolor: genre.color + '20',
                     borderRadius: 2,
                     p: isMobile ? 2 : 3,
@@ -674,7 +320,7 @@ const PodcastLanding = () => {
                 transform: 'translateX(-50%)',
                 width: '80px',
                 height: '4px',
-                background: `linear-gradient(90deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
+                background: `linear-gradient(90deg, ${Theme.palette.primary.main} 0%, ${Theme.palette.secondary.main} 100%)`,
                 borderRadius: '2px'
               }
             }}
@@ -691,7 +337,7 @@ const PodcastLanding = () => {
               bottom: isMobile ? -30 : -40
             },
             '& .slick-dots li button:before': {
-              color: theme.palette.primary.main
+              color: Theme.palette.primary.main
             },
             '& .slick-track': {
               display: 'flex',
@@ -708,7 +354,7 @@ const PodcastLanding = () => {
               {topShows.map((show) => (
                 <Box key={show.title} sx={{ padding: isMobile ? 1 : 2, height: '100%' }}>
                   <Card sx={{
-                    background: theme.palette.background.paper,
+                    background: Theme.palette.background.paper,
                     display: 'flex',
                     flexDirection: 'column',
                     height: '100%',
@@ -825,10 +471,10 @@ const PodcastLanding = () => {
                 width: '80px',
                 height: '4px',
                 background: `linear-gradient(90deg, 
-          ${theme.palette.primary.main} 0%, 
-          ${theme.palette.secondary.main} 100%)`,
+          ${Theme.palette.primary.main} 0%, 
+          ${Theme.palette.secondary.main} 100%)`,
                 borderRadius: '2px',
-                opacity: theme.palette.mode === 'dark' ? 1 : 0.8
+                opacity: Theme.palette.mode === 'dark' ? 1 : 0.8
               }
             }}
           >
@@ -845,7 +491,7 @@ const PodcastLanding = () => {
               alignItems: 'stretch'
             },
             '& .slick-dots li button:before': {
-              color: theme.palette.primary.main
+              color: Theme.palette.primary.main
             },
             '& .slick-slide': {
               height: 'auto',
@@ -860,14 +506,14 @@ const PodcastLanding = () => {
               slidesToScroll: isMobile ? 1 : 2,
               responsive: [
                 {
-                  breakpoint: theme.breakpoints.values.lg,
+                  breakpoint: Theme.breakpoints.values.lg,
                   settings: {
                     slidesToShow: 3,
                     slidesToScroll: 2
                   }
                 },
                 {
-                  breakpoint: theme.breakpoints.values.md,
+                  breakpoint: Theme.breakpoints.values.md,
                   settings: {
                     slidesToShow: 2,
                     slidesToScroll: 2,
@@ -875,7 +521,7 @@ const PodcastLanding = () => {
                   }
                 },
                 {
-                  breakpoint: theme.breakpoints.values.sm,
+                  breakpoint: Theme.breakpoints.values.sm,
                   settings: {
                     slidesToShow: 1,
                     slidesToScroll: 1,
@@ -892,115 +538,118 @@ const PodcastLanding = () => {
                   height: '100%',
                   width: isMobile ? 300 : 'auto'
                 }}>
-                  <Card sx={{
-                    height: '100%',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    transition: 'transform 0.2s, box-shadow 0.2s',
-                    background: theme.palette.background.paper,
-                    border: `1px solid ${theme.palette.divider}`,
-                    '&:hover': {
-                      transform: 'translateY(-8px)',
-                      boxShadow: theme.palette.mode === 'dark'
-                        ? `0 8px 32px ${theme.palette.primary.main}30`
-                        : `0 8px 24px ${theme.palette.primary.main}15`
-                    }
-                  }}>
-                    <CardMedia
-                      component="img"
-                      height={180}
-                      image={show.image}
-                      alt={show.title}
-                      sx={{
-                        position: 'relative',
-                        '&::after': {
-                          content: '""',
-                          position: 'absolute',
-                          top: 0,
-                          left: 0,
-                          right: 0,
-                          bottom: 0,
-                          background: `linear-gradient(45deg, 
-                    ${theme.palette.primary.main}${theme.palette.mode === 'dark' ? '30' : '15'}, 
-                    ${theme.palette.secondary.main}${theme.palette.mode === 'dark' ? '30' : '15'})`,
-                          mixBlendMode: theme.palette.mode === 'dark' ? 'soft-light' : 'multiply'
-                        }
-                      }}
-                    />
-                    <CardContent sx={{
-                      flexGrow: 1,
-                      p: isMobile ? 1.5 : 2,
-                      background: theme.palette.mode === 'dark'
-                        ? `linear-gradient(180deg, 
-                    ${theme.palette.primary.light}05, 
-                    ${theme.palette.primary.main}15)`
-                        : `linear-gradient(180deg, 
-                    ${theme.palette.primary.light}03, 
-                    ${theme.palette.primary.light}08)`
-                    }}>
-                      <Typography gutterBottom variant="h6" component="div">
-                        {show.title}
-                      </Typography>
-                      <Stack direction="row" spacing={1} sx={{ mb: 1, flexWrap: 'wrap' }}>
-                        <Typography variant="caption" sx={{
-                          background: theme.palette.action.hover,
-                          px: 1,
-                          borderRadius: 1,
-                          color: theme.palette.mode === 'dark'
-                            ? 'primary.light'
-                            : 'primary.dark'
-                        }}>
-                          New Episode
-                        </Typography>
-                        <Typography variant="caption" sx={{
-                          background: theme.palette.action.hover,
-                          px: 1,
-                          borderRadius: 1,
-                          color: theme.palette.mode === 'dark'
-                            ? 'secondary.light'
-                            : 'secondary.dark'
-                        }}>
-                          45 min
-                        </Typography>
-                      </Stack>
-                      <Typography variant="body2" color="text.secondary">
-                        {show.host}
-                      </Typography>
-                    </CardContent>
-                    <Box sx={{
-                      p: isMobile ? 1 : 2,
+                  <Link
+                    to={`/episode/${show.id}`}
+                    style={{ textDecoration: 'none', color: 'inherit' }}>
+                    <Card sx={{
+                      height: '100%',
                       display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      background: theme.palette.action.selected
+                      flexDirection: 'column',
+                      transition: 'transform 0.2s, box-shadow 0.2s',
+                      background: Theme.palette.background.paper,
+                      border: `1px solid ${Theme.palette.divider}`,
+                      '&:hover': {
+                        transform: 'translateY(-8px)',
+                        boxShadow: Theme.palette.mode === 'dark'
+                          ? `0 8px 32px ${Theme.palette.primary.main}30`
+                          : `0 8px 24px ${Theme.palette.primary.main}15`
+                      }
                     }}>
-                      <Button
-                        startIcon={<PlayArrow />}
-                        size="small"
+                      <CardMedia
+                        component="img"
+                        height={180}
+                        image={show.image}
+                        alt={show.title}
                         sx={{
-                          background: `linear-gradient(45deg, 
-                    ${theme.palette.primary.main} 0%, 
-                    ${theme.palette.secondary.main} 100%)`,
-                          color: theme.palette.primary.contrastText,
-                          '&:hover': {
-                            transform: 'scale(1.05)',
-                            boxShadow: `0 4px 12px ${theme.palette.primary.main}30`
+                          position: 'relative',
+                          '&::after': {
+                            content: '""',
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
+                            background: `linear-gradient(45deg, 
+                    ${Theme.palette.primary.main}${Theme.palette.mode === 'dark' ? '30' : '15'}, 
+                    ${Theme.palette.secondary.main}${Theme.palette.mode === 'dark' ? '30' : '15'})`,
+                            mixBlendMode: Theme.palette.mode === 'dark' ? 'soft-light' : 'multiply'
                           }
                         }}
-                      >
-                        Play Now
-                      </Button>
-                      <Typography variant="caption" color="text.secondary" sx={{ opacity: 0.8 }}>
-                        {new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
-                      </Typography>
-                    </Box>
-                  </Card>
+                      />
+                      <CardContent sx={{
+                        flexGrow: 1,
+                        p: isMobile ? 1.5 : 2,
+                        background: Theme.palette.mode === 'dark'
+                          ? `linear-gradient(180deg, 
+                    ${Theme.palette.primary.light}05, 
+                    ${Theme.palette.primary.main}15)`
+                          : `linear-gradient(180deg, 
+                    ${Theme.palette.primary.light}03, 
+                    ${Theme.palette.primary.light}08)`
+                      }}>
+                        <Typography gutterBottom variant="h6" component="div">
+                          {show.title}
+                        </Typography>
+                        <Stack direction="row" spacing={1} sx={{ mb: 1, flexWrap: 'wrap' }}>
+                          <Typography variant="caption" sx={{
+                            background: Theme.palette.action.hover,
+                            px: 1,
+                            borderRadius: 1,
+                            color: Theme.palette.mode === 'dark'
+                              ? 'primary.light'
+                              : 'primary.dark'
+                          }}>
+                            New Episode
+                          </Typography>
+                          <Typography variant="caption" sx={{
+                            background: Theme.palette.action.hover,
+                            px: 1,
+                            borderRadius: 1,
+                            color: Theme.palette.mode === 'dark'
+                              ? 'secondary.light'
+                              : 'secondary.dark'
+                          }}>
+                            45 min
+                          </Typography>
+                        </Stack>
+                        <Typography variant="body2" color="text.secondary">
+                          {show.host}
+                        </Typography>
+                      </CardContent>
+                      <Box sx={{
+                        p: isMobile ? 1 : 2,
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        background: Theme.palette.action.selected
+                      }}>
+                        <Button
+                          startIcon={<PlayArrow />}
+                          size="small"
+                          sx={{
+                            background: `linear-gradient(45deg, 
+                    ${Theme.palette.primary.main} 0%, 
+                    ${Theme.palette.secondary.main} 100%)`,
+                            color: Theme.palette.primary.contrastText,
+                            '&:hover': {
+                              transform: 'scale(1.05)',
+                              boxShadow: `0 4px 12px ${Theme.palette.primary.main}30`
+                            }
+                          }}
+                        >
+                          Play Now
+                        </Button>
+                        <Typography variant="caption" color="text.secondary" sx={{ opacity: 0.8 }}>
+                          {new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                        </Typography>
+                      </Box>
+                    </Card>
+                  </Link>
                 </Box>
               ))}
             </Slider>
           </Box>
         </Container>
-
 
         <Container maxWidth="xl" sx={{ py: 4, mb: isMobile ? 4 : 6, display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', }}>
           <Typography
@@ -1019,7 +668,7 @@ const PodcastLanding = () => {
                 transform: 'translateX(-50%)',
                 width: '120px',
                 height: '2px',
-                background: `linear-gradient(90deg, transparent 0%, ${theme.palette.primary.main} 50%, transparent 100%)`,
+                background: `linear-gradient(90deg, transparent 0%, ${Theme.palette.primary.main} 50%, transparent 100%)`,
                 opacity: 0.6
               }
             }}
@@ -1035,7 +684,7 @@ const PodcastLanding = () => {
                   alignItems: "center",
                   p: 2,
                   minHeight: 240,
-                  background: theme.palette.background.paper,
+                  background: Theme.palette.background.paper,
                   backdropFilter: 'blur(12px)',
                   border: '1px solid rgba(236, 226, 226, 0.1)',
                   position: 'relative',
@@ -1043,7 +692,7 @@ const PodcastLanding = () => {
                   transition: 'all 0.3s ease',
                   '&:hover': {
                     transform: 'translateY(-4px)',
-                    boxShadow: `0 8px 24px ${theme.palette.primary.main}20`
+                    boxShadow: `0 8px 24px ${Theme.palette.primary.main}20`
                   },
                   '&::before': {
                     content: '""',
@@ -1053,7 +702,7 @@ const PodcastLanding = () => {
                     width: '200%',
                     height: '200%',
                     background: `radial-gradient(circle at 50% 50%, 
-              ${theme.palette.primary.main}10 0%, 
+              ${Theme.palette.primary.main}10 0%, 
               transparent 70%)`,
                     animation: 'floatEffect 15s infinite linear'
                   }
@@ -1080,8 +729,8 @@ const PodcastLanding = () => {
                       mb: 1,
                       fontWeight: 600,
                       background: `linear-gradient(45deg, 
-                ${theme.palette.primary.light}, 
-                ${theme.palette.secondary.light})`,
+                ${Theme.palette.primary.light}, 
+                ${Theme.palette.secondary.light})`,
                       WebkitBackgroundClip: 'text',
                       WebkitTextFillColor: 'transparent'
                     }}>
@@ -1178,5 +827,3 @@ const PodcastLanding = () => {
     </ThemeProvider>
   );
 };
-
-export default PodcastLanding;

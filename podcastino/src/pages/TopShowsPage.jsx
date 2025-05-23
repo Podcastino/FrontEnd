@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import { shows } from './Data/Mockdata';
 import {
   Box,
   Button,
@@ -12,9 +13,7 @@ import {
   IconButton,
   Typography,
   ThemeProvider,
-  createTheme,
   CssBaseline,
-  useMediaQuery
 } from '@mui/material';
 import {
   PlayArrow,
@@ -24,28 +23,8 @@ import {
   People
 } from '@mui/icons-material';
 
-const theme = createTheme({
-  palette: {
-    mode: 'dark',
-    primary: { main: '#673ab7' },
-    secondary: { main: '#ff4081' },
-    background: { default: '#121212', paper: '#1e1e1e' },
-  },
-  breakpoints: {
-    values: {
-      xs: 0,
-      sm: 600,
-      md: 900,
-      lg: 1200,
-      xl: 1536,
-    },
-  },
-});
-
-const TopShowsPage = () => {
+export default function TopShowsPage ({Theme, isMobile, isTablet}) {
   const [activeTab, setActiveTab] = useState('weekly');
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
   
   // Create refs for each section
   const weeklyRef = useRef(null);
@@ -61,70 +40,6 @@ const TopShowsPage = () => {
     else if (ref === yearlyRef) setActiveTab('yearly');
     else if (ref === subscribersRef) setActiveTab('subscribers');
   };
-
-  // Sample data
-  const shows = [
-    {
-      id: 1,
-      title: 'Tech Today',
-      host: 'Sarah Johnson',
-      category: 'Technology',
-      subscribers: '1.2M',
-      episodes: 142,
-      image: 'https://source.unsplash.com/3wylDrjxH-E/300x300',
-      weeklyRank: 1,
-      monthlyRank: 3,
-      yearlyRank: 5
-    },
-    {
-      id: 2,
-      title: 'Business Insights',
-      host: 'Michael Chen',
-      category: 'Business',
-      subscribers: '950K',
-      episodes: 89,
-      image: 'https://source.unsplash.com/7okkFhxrxNw/300x300',
-      weeklyRank: 2,
-      monthlyRank: 1,
-      yearlyRank: 2
-    },
-    {
-      id: 3,
-      title: 'Science Weekly',
-      host: 'Emma Rodriguez',
-      category: 'Science',
-      subscribers: '800K',
-      episodes: 120,
-      image: 'https://source.unsplash.com/QckxruozjRg/300x300',
-      weeklyRank: 3,
-      monthlyRank: 2,
-      yearlyRank: 3
-    },
-    {
-      id: 4,
-      title: 'History Uncovered',
-      host: 'David Wilson',
-      category: 'History',
-      subscribers: '750K',
-      episodes: 110,
-      image: 'https://source.unsplash.com/8CqDvPuo_kI/300x300',
-      weeklyRank: 4,
-      monthlyRank: 5,
-      yearlyRank: 1
-    },
-    {
-      id: 5,
-      title: 'Health Matters',
-      host: 'Lisa Park',
-      category: 'Health',
-      subscribers: '700K',
-      episodes: 95,
-      image: 'https://source.unsplash.com/zFrUz_tNjCY/300x300',
-      weeklyRank: 5,
-      monthlyRank: 4,
-      yearlyRank: 4
-    }
-  ];
 
   const rankingSections = [
     {
@@ -162,84 +77,9 @@ const TopShowsPage = () => {
   ];
 
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={Theme}>
       <CssBaseline />
       <Container maxWidth="xl" sx={{ py: isMobile ? 2 : 4 }}>
-        {/* Header */}
-        <Box sx={{ mb: isMobile ? 4 : 6, textAlign: 'center' }}>
-          <Typography variant={isMobile ? 'h3' : 'h2'} sx={{ 
-            fontWeight: 800,
-            background: `linear-gradient(45deg, ${theme.palette.primary.main} 30%, ${theme.palette.secondary.main} 90%)`,
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            mb: 2,
-            fontSize: isMobile ? '2rem' : '3rem'
-          }}>
-            Top Podcasts
-          </Typography>
-          
-          <Box sx={{ 
-            display: 'flex', 
-            justifyContent: 'center', 
-            gap: 1, 
-            mb: 4,
-            flexWrap: isMobile ? 'wrap' : 'nowrap'
-          }}>
-            <Button
-              variant={activeTab === 'weekly' ? 'contained' : 'outlined'}
-              onClick={() => scrollToRef(weeklyRef)}
-              sx={{ 
-                textTransform: 'none',
-                fontSize: isMobile ? '0.75rem' : '0.875rem',
-                px: isMobile ? 1 : 2,
-                py: isMobile ? 0.5 : 1
-              }}
-              size={isMobile ? 'small' : 'medium'}
-            >
-              Weekly
-            </Button>
-            <Button
-              variant={activeTab === 'monthly' ? 'contained' : 'outlined'}
-              onClick={() => scrollToRef(monthlyRef)}
-              sx={{ 
-                textTransform: 'none',
-                fontSize: isMobile ? '0.75rem' : '0.875rem',
-                px: isMobile ? 1 : 2,
-                py: isMobile ? 0.5 : 1
-              }}
-              size={isMobile ? 'small' : 'medium'}
-            >
-              Monthly
-            </Button>
-            <Button
-              variant={activeTab === 'yearly' ? 'contained' : 'outlined'}
-              onClick={() => scrollToRef(yearlyRef)}
-              sx={{ 
-                textTransform: 'none',
-                fontSize: isMobile ? '0.75rem' : '0.875rem',
-                px: isMobile ? 1 : 2,
-                py: isMobile ? 0.5 : 1
-              }}
-              size={isMobile ? 'small' : 'medium'}
-            >
-              Yearly
-            </Button>
-            <Button
-              variant={activeTab === 'subscribers' ? 'contained' : 'outlined'}
-              onClick={() => scrollToRef(subscribersRef)}
-              sx={{ 
-                textTransform: 'none',
-                fontSize: isMobile ? '0.75rem' : '0.875rem',
-                px: isMobile ? 1 : 2,
-                py: isMobile ? 0.5 : 1
-              }}
-              size={isMobile ? 'small' : 'medium'}
-            >
-              Subscribers
-            </Button>
-          </Box>
-        </Box>
-
         {/* Ranking Sections */}
         {rankingSections.map((section) => (
           <Box 
@@ -261,7 +101,7 @@ const TopShowsPage = () => {
             }}>
               <IconButton sx={{ 
                 color: 'primary.main',
-                backgroundColor: theme.palette.primary.main + '20',
+                backgroundColor: Theme.palette.primary.main + '20',
                 borderRadius: 2,
                 p: isMobile ? 0.5 : 1
               }}>
@@ -323,7 +163,7 @@ const TopShowsPage = () => {
                             left: 0,
                             right: 0,
                             bottom: 0,
-                            background: `linear-gradient(180deg, transparent 0%, ${theme.palette.background.default} 100%)`
+                            background: `linear-gradient(180deg, transparent 0%, ${Theme.palette.background.default} 100%)`
                           }
                         }}
                       />
@@ -412,5 +252,3 @@ const TopShowsPage = () => {
     </ThemeProvider>
   );
 };
-
-export default TopShowsPage;
