@@ -46,7 +46,6 @@ const FileUploadDialog = ({ open, onClose, creatorShows }) => {
   const [isDragActive, setIsDragActive] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
-  
   const [episodeDetails, setEpisodeDetails] = useState({
     title: '',
     description: '',

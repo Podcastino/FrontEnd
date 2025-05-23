@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import {
   Box,
   Container,
-  AppBar,
   Typography,
   Divider,
   Avatar,
@@ -17,14 +16,12 @@ import {
   Chip,
   Stack,
   ThemeProvider,
-  createTheme,
   CssBaseline
 } from "@mui/material";
 import {
   PlayArrow,
   Pause,
   Favorite,
-  Search,
   FavoriteBorder,
   Share,
   MoreVert,
@@ -33,24 +30,7 @@ import {
   Download
 } from "@mui/icons-material";
 
-// Deep Purple Theme
-const theme = createTheme({
-  palette: {
-    mode: 'dark',
-    primary: {
-      main: '#673ab7',
-    },
-    secondary: {
-      main: '#ff4081',
-    },
-    background: {
-      default: '#121212',
-      paper: '#1e1e1e',
-    },
-  },
-});
-
-const PodcastEpisodePage = () => {
+function PodcastEpisodePage({ Theme, isMobile, isTablet}) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
   const [comment, setComment] = useState('');
@@ -127,38 +107,8 @@ const PodcastEpisodePage = () => {
   };
 
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={Theme}>
       <CssBaseline />
-      <AppBar position="sticky" color="default" elevation={1}>
-          <Container maxWidth="xl">
-            <Stack direction="row" alignItems="center" py={2}>
-              <Typography variant="h4" sx={{ fontWeight: 700, mr: 4, color: 'primary.main' }}>
-                PODCASTINO
-              </Typography>
-              
-              <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 3 }}>
-                <Button color="inherit">Discover</Button>
-                <Button color="inherit">Genres</Button>
-                <Button color="inherit">Top Shows</Button>
-              </Box>
-              
-              <Box sx={{ flexGrow: 1 }} />
-              
-              <TextField
-                size="small"
-                placeholder="Search podcasts..."
-                InputProps={{
-                  startAdornment: <Search sx={{ mr: 1 }} />,
-                }}
-                sx={{ width: 250, mr: 2, display: { xs: 'none', sm: 'block' } }}
-              />
-              
-              <Button href="/signup" variant="contained" color="primary" sx={{ mr: 2 }}>
-                Sign In
-              </Button>
-            </Stack>
-          </Container>
-        </AppBar>
       <Container maxWidth="lg" sx={{ py: 4 }}>
         {/* Podcast Header */}
         <Box sx={{ display: 'flex', mb: 4 }}>

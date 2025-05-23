@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 // MUI components & hooks
@@ -20,7 +20,8 @@ import {
   Dialog,
   Slide,
   DialogContent,
-  InputAdornment
+  InputAdornment,
+  Avatar
 } from '@mui/material';
 
 // MUI icons
@@ -36,12 +37,13 @@ import {
 import Login from './pages/Login';
 import PodcastLanding from './pages/landing';
 import SignUpPage from './pages/newsignup';
-import TopShowsPage from './pages/topshows';
-import ShowsPage from './pages/generes';
+import TopShowsPage from './pages/TopShowsPage';
+import Generes from './pages/Generes';
 import Profile from './pages/Profile';
-import PodcastEpisodePage from './pages/podpage';
+import PodcastEpisodePage from './pages/PodcastEpisodePage';
 import ForgetPassword from './pages/Forget-pass';
-
+import ProfileMenu from './pages/Modals/ProfileMenu'
+import { fetchUserProfile } from './pages/api/userService'
 
 // Deep Purple Theme
 const getDesignTokens = (mode) => ({
@@ -94,8 +96,24 @@ function App() {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
   const [anchorEl, setAnchorEl] = useState(null);
+  const [anchorElProfile, setAnchorElProfile] = useState(null);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [openProfile, setOpenProfile] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userData, setUserData] = useState({
+    name: '',
+    email: '',
+    bio: '',
+    joinDate: '',
+    stats: {
+      listened: 0,
+      favorites: 0,
+      playlists: 0,
+      shows: 0,
+    }
+  });
+
   const open = Boolean(anchorEl);
   const colorMode = React.useMemo(
     () => ({
@@ -106,12 +124,34 @@ function App() {
     [],
   );
 
+
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+      setIsLoggedIn(true);
+    }
+    const loadUserProfile = async () => {
+      try {
+        const profile = await fetchUserProfile();
+        setUserData(profile);
+      } catch (error) {
+        console.error("Failed to load user profile:", error);
+      }
+    };
+    loadUserProfile();
+  }, []);
+
   const handleSearchOpen = () => {
     setSearchOpen(true);
   };
 
   const handleSearchClose = () => {
     setSearchOpen(false);
+  };
+
+  const handleAvatarClick = (event) => {
+    setAnchorElProfile(event.currentTarget);
+    setOpenProfile(true);
   };
 
   const handleMenuClick = (event) => {
@@ -122,6 +162,14 @@ function App() {
     setAnchorEl(null);
   };
 
+  const handleProfileMenuClose = () => {
+    setOpenProfile(false);
+  };
+
+  const handleSignOut = () => {
+    localStorage.removeItem('access_token');
+    setIsLoggedIn(false);
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -293,34 +341,45 @@ function App() {
                 {mode === 'dark' ? <Brightness7 /> : <Brightness4 />}
               </IconButton>
 
-              <Button
-                href="/signup"
-                variant="contained"
-                color="primary"
-                sx={{
-                  mr: 2,
-                  fontSize: isMobile ? '0.75rem' : '0.875rem',
-                  px: isMobile ? 1 : 2,
-                  py: isMobile ? 0.5 : 1
-                }}
-              >
-                Sign In
-              </Button>
+              {/* Conditional rendering based on login state */}
+              {isLoggedIn ? (
+                <Avatar
+                  sx={{ width: 40, height: 40, cursor: 'pointer' }}
+                  alt="User Avatar"
+                  src="https://randomuser.me/api/portraits/men/32.jpg"
+                  onClick={handleAvatarClick}
+                />
+              ) : (
+                <Button href="/signup" variant="contained" color="primary" sx={{ mr: 2 }}>
+                  Sign In
+                </Button>
+              )}
             </Toolbar>
           </Container>
+          <ProfileMenu
+            anchorEl={anchorElProfile}
+            open={openProfile}
+            onClose={handleProfileMenuClose}
+            onSignOut={handleSignOut}
+            userData={userData}
+          />
         </AppBar>
 
         {/* Page Content */}
         <Box>
           <Routes>
-            <Route path="/" element={<PodcastLanding Theme={theme} isMobile={isMobile} isTablet={isTablet}/>} />
+            <Route path="/" element={<PodcastLanding Theme={theme} isMobile={isMobile} isTablet={isTablet} isLoggedIn={isLoggedIn}/>} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUpPage />} />
             <Route path="/forget-pass" element={<ForgetPassword />} />
-            <Route path="/episode" element={<PodcastEpisodePage />} />
-            <Route path="/shows" element={<ShowsPage Theme={theme} isMobile={isMobile} isTablet={isTablet} />} />
-            <Route path="/topshows" element={<TopShowsPage Theme={theme} isMobile={isMobile} isTablet={isTablet}/>} />
-            <Route path="/profile" element={<Profile />} />
+            {/* <Route path="/episode" element={<PodcastEpisodePage Theme={theme} isMobile={isMobile} isTablet={isTablet} />} /> */}
+            <Route
+              path="/episode/:id"
+              element={<PodcastEpisodePage Theme={theme} isMobile={isMobile} isTablet={isTablet} />}
+            />
+            <Route path="/Generes" element={<Generes Theme={theme} isMobile={isMobile} isTablet={isTablet} />} />
+            <Route path="/topshows" element={<TopShowsPage Theme={theme} isMobile={isMobile} isTablet={isTablet} />} />
+            <Route path="/profile" element={<Profile Theme={theme} isMobile={isMobile} isTablet={isTablet} />} />
           </Routes>
         </Box>
       </Router>

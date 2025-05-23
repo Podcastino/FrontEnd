@@ -20,7 +20,6 @@ const borderSx = {
 };
 
 export default function Login() {
-  // State variables for input fields and error messages
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");

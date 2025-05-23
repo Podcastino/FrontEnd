@@ -1,5 +1,6 @@
 import React from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
+import { topShows, genres } from './Data/Mockdata';
 import {
   Box,
   Button,
@@ -13,108 +14,22 @@ import {
   Stack,
   Typography,
   ThemeProvider,
-  CssBaseline,
+  CssBaseline
 } from "@mui/material";
 import {
   PlayArrow,
   FavoriteBorder,
   FiberManualRecord,
 } from "@mui/icons-material";
-
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-// Rest of your code remains the same...
-// [Keep all your existing theme configuration, sample data, and component code]
-// Deep Purple Theme
-// Replace the existing theme configuration with this
-
-// Sample data
-const genres = [
-  { name: "True Crime", color: "#ff5252" },
-  { name: "Comedy", color: "#ffeb3b" },
-  { name: "News", color: "#4caf50" },
-  { name: "Business", color: "#2196f3" },
-  { name: "Technology", color: "#9c27b0" },
-  { name: "Health", color: "#00bcd4" },
-];
-
-const topShows = [
-  {
-    title: "Serial",
-    host: "Sarah Koenig",
-    category: "True Crime",
-    listeners: "2.5M",
-    image: "https://via.placeholder.com/300x300/ff5252/ffffff?text=Serial"
-  },
-  {
-    title: "The Daily",
-    host: "The New York Times",
-    category: "News",
-    listeners: "1.8M",
-    image: "https://via.placeholder.com/300x300/4caf50/ffffff?text=The+Daily"
-  },
-  {
-    title: "How I Built This",
-    host: "Guy Raz",
-    category: "Business",
-    listeners: "1.2M",
-    image: "https://via.placeholder.com/300x300/2196f3/ffffff?text=How+I+Built+This"
-  },
-  {
-    title: "Science Vs",
-    host: "Wendy Zukerman",
-    category: "Science",
-    listeners: "950K",
-    image: "https://via.placeholder.com/300x300/00bcd4/ffffff?text=Science+Vs"
-  },
-  {
-    title: "Radiolab",
-    host: "Jad Abumrad",
-    category: "Science",
-    listeners: "1.1M",
-    image: "https://via.placeholder.com/300x300/9c27b0/ffffff?text=Radiolab"
-  },
-  {
-    title: "The Joe Rogan Experience",
-    host: "Joe Rogan",
-    category: "Talk",
-    listeners: "3.5M",
-    image: "https://via.placeholder.com/300x300/ff9800/ffffff?text=Joe+Rogan"
-  },
-  {
-    title: "Serial",
-    host: "Sarah Koenig",
-    category: "True Crime",
-    listeners: "2.5M",
-    image: "https://via.placeholder.com/300x300/ff5252/ffffff?text=Serial"
-  }, {
-    title: "Serial",
-    host: "Sarah Koenig",
-    category: "True Crime",
-    listeners: "2.5M",
-    image: "https://via.placeholder.com/300x300/ff5252/ffffff?text=Serial"
-  }, {
-    title: "Serial",
-    host: "Sarah Koenig",
-    category: "True Crime",
-    listeners: "2.5M",
-    image: "https://via.placeholder.com/300x300/ff5252/ffffff?text=Serial"
-  }, {
-    title: "Serial",
-    host: "Sarah Koenig",
-    category: "True Crime",
-    listeners: "2.5M",
-    image: "https://via.placeholder.com/300x300/ff5252/ffffff?text=Serial"
-  },
-];
-
-export default function PodcastLanding({ Theme, isMobile, isTablet }) {
+export default function PodcastLanding({ Theme, isMobile, isTablet, isLoggedIn }) {
   const navigate = useNavigate();
 
   const handleGenreClick = (genreName) => {
-    navigate('/shows', {
+    navigate('/generes', {
       state: { selectedGenre: genreName }
     });
   };
@@ -152,7 +67,6 @@ export default function PodcastLanding({ Theme, isMobile, isTablet }) {
     <ThemeProvider theme={Theme}>
       <CssBaseline />
       <Box sx={{ minHeight: '100vh', bgcolor: 'background.default' }}>
-        {/* Navigation Bar - Responsive */}
         {/* Hero Section - Responsive */}
         <Box sx={{
           py: isMobile ? 6 : 10,
@@ -249,10 +163,15 @@ export default function PodcastLanding({ Theme, isMobile, isTablet }) {
                 </Typography>
 
                 <Stack direction={isMobile ? 'column' : 'row'} spacing={2}>
-                  <Button
+                  { isLoggedIn ? (
+                    <>
+                    </>
+                  ) : (
+                    <Button
                     variant="contained"
                     color="primary"
                     size={isMobile ? 'medium' : 'large'}
+                    onClick={() => navigate('/signup')}
                     sx={{
                       backdropFilter: 'blur(10px)',
                       background: Theme.palette.mode === 'dark'
@@ -272,9 +191,11 @@ export default function PodcastLanding({ Theme, isMobile, isTablet }) {
                   >
                     Start Listening
                   </Button>
+                  )}
                   <Button
                     variant="outlined"
                     size={isMobile ? 'medium' : 'large'}
+                    onClick={() => { navigate('/topshows'); }}
                     sx={{
                       borderColor: Theme.palette.mode === 'dark'
                         ? 'rgba(255,255,255,0.2)'
@@ -346,10 +267,11 @@ export default function PodcastLanding({ Theme, isMobile, isTablet }) {
           </Typography>
           <Grid container spacing={isMobile ? 2 : 3}>
             {genres.map((genre) => (
-              <Grid item xs={6} sm={4} md={2} key={genre.name}>
+              <Grid item xs={6} sm={4} md={2} key={genre.name} sx={{margin: 'auto'}}>
                 <Box
                   onClick={() => handleGenreClick(genre.name)}
                   sx={{
+                    width: '10rem',
                     bgcolor: genre.color + '20',
                     borderRadius: 2,
                     p: isMobile ? 2 : 3,
@@ -616,115 +538,118 @@ export default function PodcastLanding({ Theme, isMobile, isTablet }) {
                   height: '100%',
                   width: isMobile ? 300 : 'auto'
                 }}>
-                  <Card sx={{
-                    height: '100%',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    transition: 'transform 0.2s, box-shadow 0.2s',
-                    background: Theme.palette.background.paper,
-                    border: `1px solid ${Theme.palette.divider}`,
-                    '&:hover': {
-                      transform: 'translateY(-8px)',
-                      boxShadow: Theme.palette.mode === 'dark'
-                        ? `0 8px 32px ${Theme.palette.primary.main}30`
-                        : `0 8px 24px ${Theme.palette.primary.main}15`
-                    }
-                  }}>
-                    <CardMedia
-                      component="img"
-                      height={180}
-                      image={show.image}
-                      alt={show.title}
-                      sx={{
-                        position: 'relative',
-                        '&::after': {
-                          content: '""',
-                          position: 'absolute',
-                          top: 0,
-                          left: 0,
-                          right: 0,
-                          bottom: 0,
-                          background: `linear-gradient(45deg, 
+                  <Link
+                    to={`/episode/${show.id}`}
+                    style={{ textDecoration: 'none', color: 'inherit' }}>
+                    <Card sx={{
+                      height: '100%',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      transition: 'transform 0.2s, box-shadow 0.2s',
+                      background: Theme.palette.background.paper,
+                      border: `1px solid ${Theme.palette.divider}`,
+                      '&:hover': {
+                        transform: 'translateY(-8px)',
+                        boxShadow: Theme.palette.mode === 'dark'
+                          ? `0 8px 32px ${Theme.palette.primary.main}30`
+                          : `0 8px 24px ${Theme.palette.primary.main}15`
+                      }
+                    }}>
+                      <CardMedia
+                        component="img"
+                        height={180}
+                        image={show.image}
+                        alt={show.title}
+                        sx={{
+                          position: 'relative',
+                          '&::after': {
+                            content: '""',
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
+                            background: `linear-gradient(45deg, 
                     ${Theme.palette.primary.main}${Theme.palette.mode === 'dark' ? '30' : '15'}, 
                     ${Theme.palette.secondary.main}${Theme.palette.mode === 'dark' ? '30' : '15'})`,
-                          mixBlendMode: Theme.palette.mode === 'dark' ? 'soft-light' : 'multiply'
-                        }
-                      }}
-                    />
-                    <CardContent sx={{
-                      flexGrow: 1,
-                      p: isMobile ? 1.5 : 2,
-                      background: Theme.palette.mode === 'dark'
-                        ? `linear-gradient(180deg, 
-                    ${Theme.palette.primary.light}05, 
-                    ${Theme.palette.primary.main}15)`
-                        : `linear-gradient(180deg, 
-                    ${Theme.palette.primary.light}03, 
-                    ${Theme.palette.primary.light}08)`
-                    }}>
-                      <Typography gutterBottom variant="h6" component="div">
-                        {show.title}
-                      </Typography>
-                      <Stack direction="row" spacing={1} sx={{ mb: 1, flexWrap: 'wrap' }}>
-                        <Typography variant="caption" sx={{
-                          background: Theme.palette.action.hover,
-                          px: 1,
-                          borderRadius: 1,
-                          color: Theme.palette.mode === 'dark'
-                            ? 'primary.light'
-                            : 'primary.dark'
-                        }}>
-                          New Episode
-                        </Typography>
-                        <Typography variant="caption" sx={{
-                          background: Theme.palette.action.hover,
-                          px: 1,
-                          borderRadius: 1,
-                          color: Theme.palette.mode === 'dark'
-                            ? 'secondary.light'
-                            : 'secondary.dark'
-                        }}>
-                          45 min
-                        </Typography>
-                      </Stack>
-                      <Typography variant="body2" color="text.secondary">
-                        {show.host}
-                      </Typography>
-                    </CardContent>
-                    <Box sx={{
-                      p: isMobile ? 1 : 2,
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      background: Theme.palette.action.selected
-                    }}>
-                      <Button
-                        startIcon={<PlayArrow />}
-                        size="small"
-                        sx={{
-                          background: `linear-gradient(45deg, 
-                    ${Theme.palette.primary.main} 0%, 
-                    ${Theme.palette.secondary.main} 100%)`,
-                          color: Theme.palette.primary.contrastText,
-                          '&:hover': {
-                            transform: 'scale(1.05)',
-                            boxShadow: `0 4px 12px ${Theme.palette.primary.main}30`
+                            mixBlendMode: Theme.palette.mode === 'dark' ? 'soft-light' : 'multiply'
                           }
                         }}
-                      >
-                        Play Now
-                      </Button>
-                      <Typography variant="caption" color="text.secondary" sx={{ opacity: 0.8 }}>
-                        {new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
-                      </Typography>
-                    </Box>
-                  </Card>
+                      />
+                      <CardContent sx={{
+                        flexGrow: 1,
+                        p: isMobile ? 1.5 : 2,
+                        background: Theme.palette.mode === 'dark'
+                          ? `linear-gradient(180deg, 
+                    ${Theme.palette.primary.light}05, 
+                    ${Theme.palette.primary.main}15)`
+                          : `linear-gradient(180deg, 
+                    ${Theme.palette.primary.light}03, 
+                    ${Theme.palette.primary.light}08)`
+                      }}>
+                        <Typography gutterBottom variant="h6" component="div">
+                          {show.title}
+                        </Typography>
+                        <Stack direction="row" spacing={1} sx={{ mb: 1, flexWrap: 'wrap' }}>
+                          <Typography variant="caption" sx={{
+                            background: Theme.palette.action.hover,
+                            px: 1,
+                            borderRadius: 1,
+                            color: Theme.palette.mode === 'dark'
+                              ? 'primary.light'
+                              : 'primary.dark'
+                          }}>
+                            New Episode
+                          </Typography>
+                          <Typography variant="caption" sx={{
+                            background: Theme.palette.action.hover,
+                            px: 1,
+                            borderRadius: 1,
+                            color: Theme.palette.mode === 'dark'
+                              ? 'secondary.light'
+                              : 'secondary.dark'
+                          }}>
+                            45 min
+                          </Typography>
+                        </Stack>
+                        <Typography variant="body2" color="text.secondary">
+                          {show.host}
+                        </Typography>
+                      </CardContent>
+                      <Box sx={{
+                        p: isMobile ? 1 : 2,
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        background: Theme.palette.action.selected
+                      }}>
+                        <Button
+                          startIcon={<PlayArrow />}
+                          size="small"
+                          sx={{
+                            background: `linear-gradient(45deg, 
+                    ${Theme.palette.primary.main} 0%, 
+                    ${Theme.palette.secondary.main} 100%)`,
+                            color: Theme.palette.primary.contrastText,
+                            '&:hover': {
+                              transform: 'scale(1.05)',
+                              boxShadow: `0 4px 12px ${Theme.palette.primary.main}30`
+                            }
+                          }}
+                        >
+                          Play Now
+                        </Button>
+                        <Typography variant="caption" color="text.secondary" sx={{ opacity: 0.8 }}>
+                          {new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                        </Typography>
+                      </Box>
+                    </Card>
+                  </Link>
                 </Box>
               ))}
             </Slider>
           </Box>
         </Container>
-
 
         <Container maxWidth="xl" sx={{ py: 4, mb: isMobile ? 4 : 6, display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', }}>
           <Typography

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import { shows } from './Data/Mockdata';
 import {
   Box,
   Button,
@@ -21,45 +22,8 @@ import {
   FavoriteBorder,
   Mic as PodcastIcon
 } from '@mui/icons-material';
-import { Brightness4, Brightness7 } from '@mui/icons-material';
-// Deep Purple Theme
-// const getDesignTokens = (mode) => ({
-//   palette: {
-//     mode,
-//     primary: {
-//       main: '#673ab7',
-//     },
-//     secondary: {
-//       main: '#ff4081',
-//     },
-//     ...(mode === 'dark' ? {
-//       // Dark mode colors
-//       background: {
-//         default: '#121212',
-//         paper: '#1e1e1e',
-//       },
-//       text: {
-//         primary: '#ffffff',
-//         secondary: 'rgba(255, 255, 255, 0.7)',
-//       },
-//       divider: 'rgba(255, 255, 255, 0.12)'
-//     } : {
-//       // Light mode colors
-//       background: {
-//         default: '#f8f9fa',
-//         paper: '#ffffff',
-//       },
-//       text: {
-//         primary: 'rgba(0, 0, 0, 0.87)',
-//         secondary: 'rgba(0, 0, 0, 0.6)',
-//       },
-//       divider: 'rgba(0, 0, 0, 0.12)'
-//     }),
-//   },
-// });
 
-
-function ShowsPage({ Theme, isMobile, isTablet }) {
+function Generes({ Theme, isMobile, isTablet }) {
   const location = useLocation();
   const [tabValue, setTabValue] = useState(0);
 
@@ -84,108 +48,7 @@ function ShowsPage({ Theme, isMobile, isTablet }) {
       }
     }
   }, [location.state]);
-  const shows = [
-    {
-      id: 1,
-      title: 'TechTalk',
-      host: 'Sarah Johnson',
-      category: 'Technology',
-      subscribers: '125K',
-      episodes: 42,
-      description: 'Weekly discussions about technology and innovation',
-      image: 'https://source.unsplash.com/3wylDrjxH-E/300x300' // Technology podcast
-    },
-    {
-      id: 2,
-      title: 'Business Insights',
-      host: 'Mark Williams',
-      category: 'Business',
-      subscribers: '87K',
-      episodes: 28,
-      description: 'Interviews with business leaders and entrepreneurs',
-      image: 'https://source.unsplash.com/0PxQ8yhqQe0/300x300' // Business meeting
-    },
-    {
-      id: 3,
-      title: 'Science Weekly',
-      host: 'Dr. Emily Chen',
-      category: 'Science',
-      subscribers: '54K',
-      episodes: 15,
-      description: 'Exploring the latest scientific discoveries',
-      image: 'https://source.unsplash.com/7okkFhxrxNw/300x300' // Science lab
-    },
-    {
-      id: 4,
-      title: 'Health Matters',
-      host: 'Dr. James Wilson',
-      category: 'Health',
-      subscribers: '92K',
-      episodes: 36,
-      description: 'Your guide to better health and wellness',
-      image: 'https://source.unsplash.com/zqe6M3pze-M/300x300' // Yoga health
-    },
-    {
-      id: 5,
-      title: 'Comedy Hour',
-      host: 'Mike & Dave',
-      category: 'Entertainment',
-      subscribers: '210K',
-      episodes: 78,
-      description: 'Laugh out loud with our weekly comedy show',
-      image: 'https://source.unsplash.com/8CqDvPuo_kI/300x300' // Comedy theater
-    },
-    {
-      id: 6,
-      title: 'Daily News',
-      host: 'The News Team',
-      category: 'News',
-      subscribers: '350K',
-      episodes: 365,
-      description: 'Your daily dose of world news',
-      image: 'https://source.unsplash.com/7okkFhxrxNw/300x300' // News studio
-    },
-    {
-      id: 7,
-      title: 'True Crime',
-      host: 'Jessica Brown',
-      category: 'True Crime',
-      subscribers: '180K',
-      episodes: 55,
-      description: 'Investigating unsolved mysteries and cold cases',
-      image: 'https://source.unsplash.com/3d5-ajZ72sw/300x300' // Mystery
-    },
-    {
-      id: 8,
-      title: 'Startup Stories',
-      host: 'Kevin Zhang',
-      category: 'Business',
-      subscribers: '68K',
-      episodes: 22,
-      description: 'Behind the scenes of successful startups',
-      image: 'https://source.unsplash.com/OG44d93iNJk/300x300' // Startup office
-    },
-    {
-      id: 9,
-      title: 'Climate Now',
-      host: 'Environmental Team',
-      category: 'Science',
-      subscribers: '89K',
-      episodes: 34,
-      description: 'Understanding climate change and solutions',
-      image: 'https://source.unsplash.com/nN1HSDtKdlw/300x300' // Climate change
-    },
-    {
-      id: 10,
-      title: 'Mindful Living',
-      host: 'Rachel Green',
-      category: 'Health',
-      subscribers: '145K',
-      episodes: 47,
-      description: 'Meditation and mental wellness techniques',
-      image: 'https://source.unsplash.com/2EJCSULRwC8/300x300' // Meditation
-    }
-  ];
+  
 
   const handleTabChange = (event, newValue) => {
     setTabValue(newValue);
@@ -645,4 +508,4 @@ function ShowsPage({ Theme, isMobile, isTablet }) {
   );
 };
 
-export default ShowsPage;
+export default Generes;

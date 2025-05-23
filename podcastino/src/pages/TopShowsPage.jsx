@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import { shows } from './Data/Mockdata';
 import {
   Box,
   Button,
@@ -40,70 +41,6 @@ export default function TopShowsPage ({Theme, isMobile, isTablet}) {
     else if (ref === subscribersRef) setActiveTab('subscribers');
   };
 
-  // Sample data
-  const shows = [
-    {
-      id: 1,
-      title: 'Tech Today',
-      host: 'Sarah Johnson',
-      category: 'Technology',
-      subscribers: '1.2M',
-      episodes: 142,
-      image: 'https://source.unsplash.com/3wylDrjxH-E/300x300',
-      weeklyRank: 1,
-      monthlyRank: 3,
-      yearlyRank: 5
-    },
-    {
-      id: 2,
-      title: 'Business Insights',
-      host: 'Michael Chen',
-      category: 'Business',
-      subscribers: '950K',
-      episodes: 89,
-      image: 'https://source.unsplash.com/7okkFhxrxNw/300x300',
-      weeklyRank: 2,
-      monthlyRank: 1,
-      yearlyRank: 2
-    },
-    {
-      id: 3,
-      title: 'Science Weekly',
-      host: 'Emma Rodriguez',
-      category: 'Science',
-      subscribers: '800K',
-      episodes: 120,
-      image: 'https://source.unsplash.com/QckxruozjRg/300x300',
-      weeklyRank: 3,
-      monthlyRank: 2,
-      yearlyRank: 3
-    },
-    {
-      id: 4,
-      title: 'History Uncovered',
-      host: 'David Wilson',
-      category: 'History',
-      subscribers: '750K',
-      episodes: 110,
-      image: 'https://source.unsplash.com/8CqDvPuo_kI/300x300',
-      weeklyRank: 4,
-      monthlyRank: 5,
-      yearlyRank: 1
-    },
-    {
-      id: 5,
-      title: 'Health Matters',
-      host: 'Lisa Park',
-      category: 'Health',
-      subscribers: '700K',
-      episodes: 95,
-      image: 'https://source.unsplash.com/zFrUz_tNjCY/300x300',
-      weeklyRank: 5,
-      monthlyRank: 4,
-      yearlyRank: 4
-    }
-  ];
-
   const rankingSections = [
     {
       title: 'Weekly Top Picks',
@@ -143,8 +80,6 @@ export default function TopShowsPage ({Theme, isMobile, isTablet}) {
     <ThemeProvider theme={Theme}>
       <CssBaseline />
       <Container maxWidth="xl" sx={{ py: isMobile ? 2 : 4 }}>
-        {/* Header */}
-
         {/* Ranking Sections */}
         {rankingSections.map((section) => (
           <Box 
