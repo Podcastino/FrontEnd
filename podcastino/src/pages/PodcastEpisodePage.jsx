@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useParams } from 'react-router-dom';
 import {
   Box,
   Container,
@@ -29,82 +30,51 @@ import {
   Subscriptions,
   Download
 } from "@mui/icons-material";
+import LandingService from "./api/LandingService";
 
 function PodcastEpisodePage({ Theme, isMobile, isTablet}) {
+  const { id: podcastId } = useParams();
+  const [episodes, setEpisodes] = useState([]);
+  const [currentEpisode, setCurrentEpisode] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
   const [comment, setComment] = useState('');
   const [comments, setComments] = useState([
-    { id: 1, user: 'JaneDoe', text: 'Great episode! Really insightful discussion.', time: '2 days ago' },
-    { id: 2, user: 'PodcastFan123', text: 'When will the next episode be out?', time: '1 day ago' },
+    { id: 1, user: 'JaneDoe', text: 'Great episode!', time: '2 days ago' },
+    { id: 2, user: 'PodcastFan123', text: 'When is the next episode?', time: '1 day ago' }
   ]);
 
-  const [currentEpisode, setCurrentEpisode] = useState({
-    id: 42,
-    title: 'Episode 42: The Ethics of Artificial Intelligence',
-    description: `In this episode, we dive deep into the ethical considerations surrounding artificial intelligence. 
-    Our guest, Dr. Michael Chen from the AI Ethics Institute, shares his perspectives on bias in algorithms, 
-    privacy concerns, and the future of responsible AI development.`,
-    date: 'May 22, 2023',
-    duration: '48:15',
-    progress: '15:32'
-  });
-
-  const episodes = [
-    { 
-      id: 42,
-      title: 'The Ethics of Artificial Intelligence', 
-      description: `In this episode, we dive deep into the ethical considerations surrounding artificial intelligence. 
-      Our guest, Dr. Michael Chen from the AI Ethics Institute, shares his perspectives on bias in algorithms, 
-      privacy concerns, and the future of responsible AI development.`,
-      duration: '48:15', 
-      date: 'May 22, 2023',
-      progress: '15:32'
-    },
-    { 
-      id: 41, 
-      title: 'The Future of AI in Daily Life', 
-      description: 'Exploring how AI will transform our everyday experiences from smart homes to personalized healthcare.',
-      duration: '45:22', 
-      date: 'May 15, 2023',
-      progress: '22:10'
-    },
-    { 
-      id: 40, 
-      title: 'Interview with Tech Pioneer', 
-      description: 'Conversation with tech visionary about the next decade of innovation and disruption.',
-      duration: '52:18', 
-      date: 'May 8, 2023',
-      progress: '08:45'
-    },
-    { 
-      id: 39, 
-      title: 'Building Sustainable Startups', 
-      description: 'How to create tech companies that are both profitable and environmentally responsible.',
-      duration: '38:45', 
-      date: 'May 1, 2023',
-      progress: '30:00'
-    },
-  ];
+  useEffect(() => {
+    async function loadEpisodes() {
+      try {
+        const data = await LandingService.fetchPodcastEpisodes(podcastId);
+        setEpisodes(data);
+        if (data.length > 0) {
+          setCurrentEpisode(data[0]);
+        }
+      } catch (error) {
+        console.error('Error loading episodes:', error);
+      }
+    }
+    loadEpisodes();
+  }, [podcastId]);
 
   const handleEpisodeSelect = (episode) => {
     setCurrentEpisode(episode);
-    setIsPlaying(false); // Reset play state when changing episodes
-    // In a real app, you would also stop any currently playing audio here
+    setIsPlaying(false);
   };
 
   const handleCommentSubmit = (e) => {
     e.preventDefault();
     if (comment.trim()) {
-      setComments([...comments, {
-        id: comments.length + 1,
-        user: 'You',
-        text: comment,
-        time: 'Just now'
-      }]);
+      setComments([...comments, { id: comments.length + 1, user: 'You', text: comment, time: 'Just now' }]);
       setComment('');
     }
   };
+
+  if (!currentEpisode) {
+    return <Typography>Loading episodes...</Typography>;
+  }
 
   return (
     <ThemeProvider theme={Theme}>

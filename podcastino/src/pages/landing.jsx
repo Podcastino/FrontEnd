@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from 'react-router-dom';
-import { topShows, genres } from './Data/Mockdata';
+import { genres } from './Data/Mockdata';
+import { fetchPodcasts } from "./api/LandingService";
 import {
   Box,
   Button,
@@ -27,6 +28,7 @@ import "slick-carousel/slick/slick-theme.css";
 
 export default function PodcastLanding({ Theme, isMobile, isTablet, isLoggedIn }) {
   const navigate = useNavigate();
+  const [topShows, setTopShows] = useState([]);
 
   const handleGenreClick = (genreName) => {
     navigate('/generes', {
@@ -62,6 +64,26 @@ export default function PodcastLanding({ Theme, isMobile, isTablet, isLoggedIn }
       }
     ]
   };
+
+  useEffect(() => {
+    async function loadPodcasts() {
+      try {
+        const podcasts = await fetchPodcasts();
+        const shows = podcasts.map(p => ({
+          id: p.id,
+          title: p.name,
+          image: p.poster,
+          host: p.publisher,
+          category: 'General',           
+          listeners: Math.floor(Math.random() * 5000)
+        }));
+        setTopShows(shows);
+      } catch (error) {
+        console.error('Failed loading top shows:', error);
+      }
+    }
+    loadPodcasts();
+  }, []);
 
   return (
     <ThemeProvider theme={Theme}>
