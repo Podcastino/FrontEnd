@@ -49,9 +49,6 @@ function PodcastEpisodePage({ Theme, isMobile, isTablet}) {
       try {
         const data = await LandingService.fetchPodcastEpisodes(podcastId);
         setEpisodes(data);
-        if (data.length > 0) {
-          setCurrentEpisode(data[0]);
-        }
       } catch (error) {
         console.error('Error loading episodes:', error);
       }
@@ -72,7 +69,7 @@ function PodcastEpisodePage({ Theme, isMobile, isTablet}) {
     }
   };
 
-  if (!currentEpisode) {
+  if (!episodes) {
     return <Typography>Loading episodes...</Typography>;
   }
 
@@ -89,10 +86,10 @@ function PodcastEpisodePage({ Theme, isMobile, isTablet}) {
           />
           <Box>
             <Typography variant="h4" sx={{ fontWeight: 700, mb: 1 }}>
-              TechTalk with Sarah Johnson
+              Shitypodcast
             </Typography>
             <Typography variant="subtitle1" color="text.secondary" sx={{ mb: 2 }}>
-              Weekly discussions about technology and innovation
+              technology and innovation
             </Typography>
             <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
               <Chip label="Technology" size="small" />
@@ -118,10 +115,10 @@ function PodcastEpisodePage({ Theme, isMobile, isTablet}) {
         {/* Current Episode */}
         <Paper elevation={3} sx={{ p: 4, mb: 4 }}>
           <Typography variant="h5" sx={{ fontWeight: 700, mb: 2 }}>
-            {currentEpisode.title}
+            {episodes.title}
           </Typography>
           <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
-            Published: {currentEpisode.date} • Duration: {currentEpisode.duration}
+            Published: {episodes.date} • Duration: {episodes.duration}
           </Typography>
           <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
             <IconButton
@@ -135,7 +132,7 @@ function PodcastEpisodePage({ Theme, isMobile, isTablet}) {
             <Box sx={{ flexGrow: 1 }}>
               <Typography variant="body1">Now Playing</Typography>
               <Typography variant="body2" color="text.secondary">
-                {currentEpisode.progress} / {currentEpisode.duration}
+                {episodes.progress} / {episodes.duration}
               </Typography>
             </Box>
             <IconButton onClick={() => setIsLiked(!isLiked)}>
@@ -150,7 +147,7 @@ function PodcastEpisodePage({ Theme, isMobile, isTablet}) {
           </Box>
 
           <Typography variant="body1" paragraph>
-            {currentEpisode.description}
+            {episodes.description}
           </Typography>
         </Paper>
 
@@ -159,14 +156,14 @@ function PodcastEpisodePage({ Theme, isMobile, isTablet}) {
           More Episodes
         </Typography>
         <List sx={{ mb: 4 }}>
-          {episodes.filter(ep => ep.id !== currentEpisode.id).map((episode) => (
+          {/* {episodes.filter(ep => ep.id !== episodes.id).map((episode) => ( */}
             <ListItem
-              key={episode.id}
+              key={episodes.id}
               button
-              onClick={() => handleEpisodeSelect(episode)}
+              onClick={() => handleEpisodeSelect(episodes)}
               secondaryAction={
                 <Typography variant="body2" color="text.secondary">
-                  {episode.duration}
+                  {episodes.duration}
                 </Typography>
               }
               sx={{ py: 2 }}
@@ -177,11 +174,11 @@ function PodcastEpisodePage({ Theme, isMobile, isTablet}) {
                 </Avatar>
               </ListItemAvatar>
               <ListItemText
-                primary={episode.title}
-                secondary={episode.date}
+                primary={episodes.title}
+                secondary={episodes.date}
               />
             </ListItem>
-          ))}
+          {/* ))} */}
         </List>
 
         {/* Comments Section */}

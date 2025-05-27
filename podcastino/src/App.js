@@ -130,15 +130,15 @@ function App() {
     if (token) {
       setIsLoggedIn(true);
     }
-    const loadUserProfile = async () => {
-      try {
-        const profile = await fetchUserProfile();
-        setUserData(profile);
-      } catch (error) {
-        console.error("Failed to load user profile:", error);
-      }
-    };
-    loadUserProfile();
+    // const loadUserProfile = async () => {
+    //   try {
+    //     const profile = await fetchUserProfile();
+    //     setUserData(profile);
+    //   } catch (error) {
+    //     console.error("Failed to load user profile:", error);
+    //   }
+    // };
+    // loadUserProfile();
   }, []);
 
   const handleSearchOpen = () => {
