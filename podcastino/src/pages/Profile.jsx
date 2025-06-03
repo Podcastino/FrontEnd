@@ -1,6 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import FileUploadDialog from "./Modals/uploaddialog";
-import { fetchUserProfile } from './api/userService'
+import {
+  fetchUserProfile,
+  fetchFavoritesList,
+  fetchPlaylistsList,
+  fetchHistory,
+  fetchUserEpisodes,
+  fetchUserPodcasts,
+  updateUserProfile,   
+} from "./api/userService";
+
 import { myShows } from './Data/Mockdata';
 import {
   Avatar,
@@ -40,6 +49,11 @@ import {
 
 function UserProfilePage ({Theme, isMoblie, isTablet}) {
   const [tabValue, setTabValue] = useState(0);
+  const [historyItems, setHistoryItems] = useState([]);
+  const [favoriteItems, setFavoriteItems] = useState([]);
+  const [playlistItems, setPlaylistItems] = useState([]);
+  const [episodeItems, setEpisodeItems] = useState([]);
+  const [myShows, setMyShows] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [uploadDialogOpen, setUploadDialogOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -61,27 +75,6 @@ function UserProfilePage ({Theme, isMoblie, isTablet}) {
 
   const [tempData, setTempData] = useState({ ...userData });
 
-  // Sample data for tabs
-  const historyItems = [
-    { id: 1, title: 'The Future of AI', podcast: 'Tech Today', time: '2 days ago' },
-    { id: 2, title: 'Mindfulness Meditation', podcast: 'Wellness Hour', time: '3 days ago' }
-  ];
-
-  const favoriteItems = [
-    { id: 1, title: 'Serial', podcast: 'Serial', episodes: 12 },
-    { id: 2, title: 'The Daily', podcast: 'NY Times', episodes: 356 }
-  ];
-
-  const playlistItems = [
-    { id: 1, name: 'Morning Commute', count: 15 },
-    { id: 2, name: 'Workout Mix', count: 8 }
-  ];
-
-  const episodeItems = [
-    { id: 1, title: 'Episode 42: The Ethics of AI', podcast: 'TechTalk', duration: '48:15' },
-    { id: 2, title: 'Building Sustainable Startups', podcast: 'Business Insights', duration: '38:45' }
-  ];
-
   const handleTabChange = (event, newValue) => {
     setTabValue(newValue);
   };
@@ -93,11 +86,6 @@ function UserProfilePage ({Theme, isMoblie, isTablet}) {
   const handleUploadClose = () => {
     setUploadDialogOpen(false);
   };
-
-  // const handleAvatarClick = (event) => {
-  //   setAnchorEl(event.currentTarget);
-  //   setOpen(true); // Open the menu
-  // };
 
   const handleEditClick = () => {
     setIsEditing(true);
@@ -112,17 +100,6 @@ function UserProfilePage ({Theme, isMoblie, isTablet}) {
   const handleCancelClick = () => {
     setIsEditing(false);
   };
-
-  // // Handle menu close
-  // const handleMenuClose = () => {
-  //   setOpen(false);
-  // };
-
-  // // Handle sign out (remove token)
-  // const handleSignOut = () => {
-  //   localStorage.removeItem('access_token'); // Remove access token
-  //   setIsLoggedIn(false); // Set login state to false
-  // };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -147,7 +124,12 @@ function UserProfilePage ({Theme, isMoblie, isTablet}) {
       }
     };
     loadUserProfile();
-  }, []);
+    if (tabValue === 0) fetchHistory().then(setHistoryItems);
+    if (tabValue === 1) fetchFavoritesList().then(setFavoriteItems);
+    if (tabValue === 2) fetchPlaylistsList().then(setPlaylistItems);
+    if (tabValue === 3) fetchUserEpisodes().then(setEpisodeItems);
+    if (tabValue === 4) fetchUserPodcasts().then(setMyShows);
+  }, [tabValue]);
 
   return (
     <ThemeProvider theme={Theme}>

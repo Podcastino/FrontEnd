@@ -36,7 +36,7 @@ import {
 // Your pages
 import Login from './pages/Login';
 import PodcastLanding from './pages/landing';
-import SignUpPage from './pages/newsignup';
+// import SignUpPage from './pages/newsignup';
 import TopShowsPage from './pages/TopShowsPage';
 import Generes from './pages/Generes';
 import Profile from './pages/Profile';
@@ -44,6 +44,7 @@ import PodcastEpisodePage from './pages/PodcastEpisodePage';
 import ForgetPassword from './pages/Forget-pass';
 import ProfileMenu from './pages/Modals/ProfileMenu'
 import { fetchUserProfile } from './pages/api/userService'
+import Signup from './pages/Signup';
 
 // Deep Purple Theme
 const getDesignTokens = (mode) => ({
@@ -127,18 +128,19 @@ function App() {
 
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
+    console.log(token);
     if (token) {
       setIsLoggedIn(true);
     }
-    // const loadUserProfile = async () => {
-    //   try {
-    //     const profile = await fetchUserProfile();
-    //     setUserData(profile);
-    //   } catch (error) {
-    //     console.error("Failed to load user profile:", error);
-    //   }
-    // };
-    // loadUserProfile();
+    const loadUserProfile = async () => {
+      try {
+        const profile = await fetchUserProfile();
+        setUserData(profile);
+      } catch (error) {
+        console.error("Failed to load user profile:", error);
+      }
+    };
+    loadUserProfile();
   }, []);
 
   const handleSearchOpen = () => {
@@ -370,7 +372,7 @@ function App() {
           <Routes>
             <Route path="/" element={<PodcastLanding Theme={theme} isMobile={isMobile} isTablet={isTablet} isLoggedIn={isLoggedIn}/>} />
             <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<SignUpPage />} />
+            <Route path="/signup" element={<Signup />} />
             <Route path="/forget-pass" element={<ForgetPassword />} />
             {/* <Route path="/episode" element={<PodcastEpisodePage Theme={theme} isMobile={isMobile} isTablet={isTablet} />} /> */}
             <Route

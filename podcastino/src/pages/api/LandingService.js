@@ -50,12 +50,33 @@ export async function fetchPodcastEpisodes(podcastId) {
   }
 }
 
+export async function fetchAllEpisodes() {
+  try {
+    const response = await fetch(`${BASE_URL}/podcasts/episodes/`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    if (!response.ok) {
+      throw new Error(`Error fetching episodes for podcasts: ${response.status}`);
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+
 /**
  * Default export of service functions
  */
 const LandingService = {
   fetchPodcasts,
   fetchPodcastEpisodes,
+  fetchAllEpisodes,
 };
 
 export default LandingService;
