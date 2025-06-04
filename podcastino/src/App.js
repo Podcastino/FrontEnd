@@ -30,10 +30,11 @@ import {
   Menu as MenuIcon,
   Close,
   Brightness4,
-  Brightness7
+  Brightness7,
+  ClassSharp
 } from '@mui/icons-material';
 
-// Your pages
+
 import Login from './pages/Login';
 import PodcastLanding from './pages/landing';
 // import SignUpPage from './pages/newsignup';
@@ -102,18 +103,7 @@ function App() {
   const [searchQuery, setSearchQuery] = useState('');
   const [openProfile, setOpenProfile] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userData, setUserData] = useState({
-    name: '',
-    email: '',
-    bio: '',
-    joinDate: '',
-    stats: {
-      listened: 0,
-      favorites: 0,
-      playlists: 0,
-      shows: 0,
-    }
-  });
+  const [userData, setUserData] = useState(null);
 
   const open = Boolean(anchorEl);
   const colorMode = React.useMemo(
@@ -125,22 +115,22 @@ function App() {
     [],
   );
 
-
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
-    console.log(token);
+    console.log("Access token:", token);
     if (token) {
       setIsLoggedIn(true);
     }
-    const loadUserProfile = async () => {
+
+    async function loadProfile() {
       try {
-        const profile = await fetchUserProfile();
-        setUserData(profile);
-      } catch (error) {
-        console.error("Failed to load user profile:", error);
+        const data = await fetchUserProfile();
+        setUserData(data);
+      } catch (err) {
+        console.error("Error loading profile:", err);
       }
-    };
-    loadUserProfile();
+    }
+    loadProfile();
   }, []);
 
   const handleSearchOpen = () => {
@@ -344,13 +334,15 @@ function App() {
               </IconButton>
 
               {/* Conditional rendering based on login state */}
-              {isLoggedIn ? (
+              {isLoggedIn && userData ? (
                 <Avatar
-                  sx={{ width: 40, height: 40, cursor: 'pointer' }}
-                  alt="User Avatar"
-                  src="https://randomuser.me/api/portraits/men/32.jpg"
+                  sx={{ width: 40, height: 40, cursor: "pointer" }}
+                  alt={userData.username}
+                  src={userData.profile_image || undefined}
                   onClick={handleAvatarClick}
-                />
+                >
+                  {userData.username?.charAt(0) || ""}
+                </Avatar>
               ) : (
                 <Button href="/signup" variant="contained" color="primary" sx={{ mr: 2 }}>
                   Sign In

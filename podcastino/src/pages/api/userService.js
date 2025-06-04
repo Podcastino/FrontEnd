@@ -132,7 +132,7 @@ export const fetchUserProfile = async () => {
   };
 
   const mergedData = {
-    name: data.username || mockData.name,
+    username: data.username || mockData.name,
     email: data.email || mockData.email,
     bio: data.bio || mockData.bio,
     joinDate: data.joinDate || mockData.joinDate,
@@ -149,7 +149,6 @@ export const fetchUserProfile = async () => {
 export const updateUserProfile = async (formData) => {
   const response = await authFetch(`${API_BASE_URL}/profile/`, {
     method: "PUT",
-    // Do NOT set Content-Type here: the browser will add multipart/form-data with boundary.
     body: formData,
   });
   if (!response.ok) {
