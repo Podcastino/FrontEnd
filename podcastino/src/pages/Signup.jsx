@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Box, Container, Typography, TextField, Button } from "@mui/material";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import pic4 from "../assets/Vector.png";
 import pic1 from "../assets/Vector-2.png";
 import pic2 from "../assets/Vector-1.png";
@@ -55,11 +55,15 @@ export default function Signup() {
       return;
     }
     if (!username.trim() || !usernameRegex.test(username)) {
-      setError("Username must be at least 3 characters and contain only letters, numbers, or underscores.");
+      setError(
+        "Username must be at least 3 characters and contain only letters, numbers, or underscores."
+      );
       return;
     }
     if (!phoneNumber.trim() || !phoneRegex.test(phoneNumber)) {
-      setError("Please enter a valid phone number (digits and optional '+' sign).");
+      setError(
+        "Please enter a valid phone number (digits and optional '+' sign)."
+      );
       return;
     }
     if (!password || password.length < 6) {
@@ -80,18 +84,21 @@ export default function Signup() {
     };
 
     try {
-      const response = await fetch("https://podcastino.darkube.app/api/signup/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(signupData),
-      });
-  
+      const response = await fetch(
+        "https://podcastino.darkube.app/api/signup/",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(signupData),
+        }
+      );
+
       if (!response.ok) {
         throw new Error("Signup failed. Please try again.");
       }
-  
+
       const data = await response.json();
       console.log("Signup successful:", data);
       setSuccess("Account created successfully! Please log in.");
@@ -132,8 +139,16 @@ export default function Signup() {
             justifyContent: "space-between",
           }}
         >
-          <img src={pic1} alt="Pic 1" style={{ width: "100%", height: "50%" }} />
-          <img src={pic3} alt="Pic 2" style={{ width: "100%", height: "50%" }} />
+          <img
+            src={pic1}
+            alt="Pic 1"
+            style={{ width: "100%", height: "50%" }}
+          />
+          <img
+            src={pic3}
+            alt="Pic 2"
+            style={{ width: "100%", height: "50%" }}
+          />
         </Box>
         <Box
           sx={{
@@ -144,8 +159,16 @@ export default function Signup() {
             justifyContent: "space-between",
           }}
         >
-          <img src={pic2} alt="Pic 3" style={{ width: "100%", height: "50%" }} />
-          <img src={pic4} alt="Pic 4" style={{ width: "100%", height: "50%" }} />
+          <img
+            src={pic2}
+            alt="Pic 3"
+            style={{ width: "100%", height: "50%" }}
+          />
+          <img
+            src={pic4}
+            alt="Pic 4"
+            style={{ width: "100%", height: "50%" }}
+          />
         </Box>
       </Box>
       <Box
@@ -160,32 +183,11 @@ export default function Signup() {
           gap: 6,
         }}
       >
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "space-between",
-            height: "100vh",
-          }}
-        >
-          <Typography
-            sx={{
-              color: PodcastinoColor,
-              fontWeight: 400,
-              fontSize: "48px",
-              fontFamily: "Nanum Pen",
-              mt: 4,
-              ml: 4,
-            }}
-          >
-            Podcastino
-          </Typography>
-          <img
-            src={mainPic}
-            alt="Main"
-            style={{ width: "500px", height: "auto", opacity: 0.4 }}
-          />
-        </Box>
+        <img
+          src={mainPic}
+          alt="Main"
+          style={{ width: "500px", height: "auto", opacity: 0.4 }}
+        />
         <Box sx={{ textAlign: "center" }}>
           <Typography
             gutterBottom
@@ -214,7 +216,11 @@ export default function Signup() {
               <Box sx={{ textAlign: "left", mb: 2, paddingX: 1 }}>
                 <Typography
                   variant="subtitle1"
-                  sx={{ color: TextfieldsColor, fontSize: "20px", fontWeight: 700 }}
+                  sx={{
+                    color: TextfieldsColor,
+                    fontSize: "20px",
+                    fontWeight: 700,
+                  }}
                 >
                   Email
                 </Typography>
@@ -236,7 +242,11 @@ export default function Signup() {
               <Box sx={{ textAlign: "left", mb: 2, paddingX: 1 }}>
                 <Typography
                   variant="subtitle1"
-                  sx={{ color: TextfieldsColor, fontSize: "20px", fontWeight: 700 }}
+                  sx={{
+                    color: TextfieldsColor,
+                    fontSize: "20px",
+                    fontWeight: 700,
+                  }}
                 >
                   Username
                 </Typography>
@@ -258,7 +268,11 @@ export default function Signup() {
               <Box sx={{ textAlign: "left", mb: 4, paddingX: 1 }}>
                 <Typography
                   variant="subtitle1"
-                  sx={{ color: TextfieldsColor, fontSize: "20px", fontWeight: 700 }}
+                  sx={{
+                    color: TextfieldsColor,
+                    fontSize: "20px",
+                    fontWeight: 700,
+                  }}
                 >
                   Phone Number
                 </Typography>
@@ -291,7 +305,11 @@ export default function Signup() {
                 <Box sx={{ flex: 1, textAlign: "left" }}>
                   <Typography
                     variant="subtitle1"
-                    sx={{ color: TextfieldsColor, fontSize: "20px", fontWeight: 700 }}
+                    sx={{
+                      color: TextfieldsColor,
+                      fontSize: "20px",
+                      fontWeight: 700,
+                    }}
                   >
                     Password
                   </Typography>
@@ -312,7 +330,11 @@ export default function Signup() {
                 <Box sx={{ flex: 1, textAlign: "left" }}>
                   <Typography
                     variant="subtitle1"
-                    sx={{ color: TextfieldsColor, fontSize: "20px", fontWeight: 700 }}
+                    sx={{
+                      color: TextfieldsColor,
+                      fontSize: "20px",
+                      fontWeight: 700,
+                    }}
                   >
                     Confirm Password
                   </Typography>
@@ -337,7 +359,9 @@ export default function Signup() {
                 <Typography sx={{ color: "red", mb: 2 }}>{error}</Typography>
               )}
               {success && (
-                <Typography sx={{ color: "green", mb: 2 }}>{success}</Typography>
+                <Typography sx={{ color: "green", mb: 2 }}>
+                  {success}
+                </Typography>
               )}
 
               {/* Submit Button */}
@@ -359,10 +383,18 @@ export default function Signup() {
               </Button>
             </form>
           </Container>
-          <Box sx={{ display: "flex", justifyContent: "flex-start", mt: 2, pl: 2 }}>
-            <Typography variant="body2" sx={{ color: "#AC77B1", fontSize: "16px" }}>
+          <Box
+            sx={{ display: "flex", justifyContent: "flex-start", mt: 2, pl: 2 }}
+          >
+            <Typography
+              variant="body2"
+              sx={{ color: "#AC77B1", fontSize: "16px" }}
+            >
               already have an account?{" "}
-              <a href="/login" style={{ color: "#AC77B1", textDecoration: "underline" }}>
+              <a
+                href="/login"
+                style={{ color: "#AC77B1", textDecoration: "underline" }}
+              >
                 log in
               </a>
             </Typography>
@@ -371,4 +403,4 @@ export default function Signup() {
       </Box>
     </Box>
   );
-};
+}

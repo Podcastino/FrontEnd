@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { shows } from './Data/Mockdata';
+import { useTheme } from '@mui/material/styles';
 import {
   Box,
   Button,
@@ -14,8 +15,6 @@ import {
   Tab,
   Tabs,
   Typography,
-  ThemeProvider,
-  CssBaseline
 } from '@mui/material';
 import {
   PlayArrow,
@@ -23,7 +22,8 @@ import {
   Mic as PodcastIcon
 } from '@mui/icons-material';
 
-function Generes({ Theme, isMobile, isTablet }) {
+function Generes({ isMobile, isTablet }) {
+  const theme = useTheme();
   const location = useLocation();
   const [tabValue, setTabValue] = useState(0);
 
@@ -59,8 +59,7 @@ function Generes({ Theme, isMobile, isTablet }) {
     : shows.filter(show => show.category === genres[tabValue].name);
 
   return (
-    <ThemeProvider theme={Theme}>
-      <CssBaseline />
+      <>
       <Container maxWidth="xl" sx={{ py: 4 }}>
 
         {/* Genre Tabs */}
@@ -97,10 +96,10 @@ function Generes({ Theme, isMobile, isTablet }) {
               right: 0,
               pointerEvents: 'none',
               background: `linear-gradient(90deg, 
-    ${Theme.palette.background.default} 0%, 
+    ${theme.palette.background.default} 0%, 
     transparent 5%, 
     transparent 95%, 
-    ${Theme.palette.background.default} 100%)`,
+    ${theme.palette.background.default} 100%)`,
 
               zIndex: 1
             }} />
@@ -338,17 +337,17 @@ function Generes({ Theme, isMobile, isTablet }) {
           overflow: 'hidden',
           background: `linear-gradient(
     145deg,
-    ${Theme.palette.primary.main}20,
-    ${Theme.palette.secondary.main}20,
-    ${Theme.palette.background.paper}
+    ${theme.palette.primary.main}20,
+    ${theme.palette.secondary.main}20,
+    ${theme.palette.background.paper}
   )`,
-          border: `1px solid ${Theme.palette.primary.main}30`,
-          boxShadow: `0 8px 32px ${Theme.palette.primary.main}20`,
+          border: `1px solid ${theme.palette.primary.main}30`,
+          boxShadow: `0 8px 32px ${theme.palette.primary.main}20`,
           transform: 'translateZ(0)',
           transition: 'all 0.4s ease',
           '&:hover': {
             transform: 'translateZ(10px)',
-            boxShadow: `0 12px 40px ${Theme.palette.primary.main}30`
+            boxShadow: `0 12px 40px ${theme.palette.primary.main}30`
           }
         }}>
           {/* Floating Particles */}
@@ -359,12 +358,12 @@ function Generes({ Theme, isMobile, isTablet }) {
               height: 40,
               background: `linear-gradient(
     145deg,
-    ${Theme.palette.primary.main}${Theme.mode === 'dark' ? '20' : '08'},
-    ${Theme.palette.secondary.main}${Theme.mode === 'dark' ? '20' : '08'},
-    ${Theme.palette.background.paper}
+    ${theme.palette.primary.main}${theme.mode === 'dark' ? '20' : '08'},
+    ${theme.palette.secondary.main}${theme.mode === 'dark' ? '20' : '08'},
+    ${theme.palette.background.paper}
   )`,
-              border: `1px solid ${Theme.palette.primary.main}${Theme.mode === 'dark' ? '30' : '10'}`,
-              boxShadow: `0 8px 32px ${Theme.palette.primary.main}${Theme.mode === 'dark' ? '20' : '08'}`,
+              border: `1px solid ${theme.palette.primary.main}${theme.mode === 'dark' ? '30' : '10'}`,
+              boxShadow: `0 8px 32px ${theme.palette.primary.main}${theme.mode === 'dark' ? '20' : '08'}`,
               borderRadius: '50%',
               animation: `float ${8 + index}s infinite ease-in-out`,
               top: `${Math.random() * 100}%`,
@@ -382,7 +381,7 @@ function Generes({ Theme, isMobile, isTablet }) {
             fontWeight: 800,
             mb: 2,
             position: 'relative',
-            background: `linear-gradient(45deg, ${Theme.palette.primary.main}, ${Theme.palette.secondary.main})`,
+            background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
             animation: 'textGlow 2s ease-in-out infinite alternate',
@@ -398,7 +397,7 @@ function Generes({ Theme, isMobile, isTablet }) {
           <Box sx={{
             fontSize: 64,
             mb: 2,
-            color: Theme.palette.primary.main,
+            color: theme.palette.primary.main,
             animation: 'floatIcon 3s ease-in-out infinite',
             '@keyframes floatIcon': {
               '0%, 100%': { transform: 'translateY(0)' },
@@ -423,12 +422,12 @@ function Generes({ Theme, isMobile, isTablet }) {
             variant="contained"
             size="large"
             sx={{
-              background: `linear-gradient(45deg, ${Theme.palette.primary.main}, ${Theme.palette.secondary.main})`,
+              background: `linear-gradient(45deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
               '&::before': {
                 background: `linear-gradient(
       120deg,
       transparent,
-      rgba(${Theme.mode === 'dark' ? '255,255,255' : '0,0,0'},0.3),
+      rgba(${theme.mode === 'dark' ? '255,255,255' : '0,0,0'},0.3),
       transparent
     )`
               },
@@ -441,7 +440,7 @@ function Generes({ Theme, isMobile, isTablet }) {
               overflow: 'hidden',
               '&:hover': {
                 transform: 'translateY(-2px) scale(1.05)',
-                boxShadow: `0 8px 24px ${Theme.palette.primary.main}40`
+                boxShadow: `0 8px 24px ${theme.palette.primary.main}40`
               },
               '&::before': {
                 content: '""',
@@ -479,9 +478,9 @@ function Generes({ Theme, isMobile, isTablet }) {
             pointerEvents: 'none',
             background: `linear-gradient(
       45deg,
-      ${Theme.palette.primary.main}30,
-      ${Theme.palette.secondary.main}30,
-      ${Theme.palette.primary.main}30
+      ${theme.palette.primary.main}30,
+      ${theme.palette.secondary.main}30,
+      ${theme.palette.primary.main}30
     )`,
             mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
             maskComposite: 'exclude',
@@ -504,7 +503,7 @@ function Generes({ Theme, isMobile, isTablet }) {
           </Typography>
         </Container>
       </Container>
-    </ThemeProvider>
+    </>
   );
 };
 

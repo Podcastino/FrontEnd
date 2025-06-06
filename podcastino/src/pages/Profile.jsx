@@ -1,7 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import FileUploadDialog from "./Modals/uploaddialog";
-import { fetchUserProfile } from './api/userService'
-import { myShows } from './Data/Mockdata';
+import {
+  fetchUserProfile,
+  fetchFavoritesList,
+  fetchPlaylistsList,
+  fetchHistory,
+  fetchUserEpisodes,
+  fetchUserPodcasts,
+  updateUserProfile,   
+} from "../api/userService";
+
 import {
   Avatar,
   Box,
@@ -21,8 +29,7 @@ import {
   Tabs,
   Typography,
   TextField,
-  ThemeProvider,
-  CssBaseline,
+  CircularProgress,
   Grid,
   CardMedia,
   CardActions
@@ -38,49 +45,28 @@ import {
 } from '@mui/icons-material';
 
 
-function UserProfilePage ({Theme, isMoblie, isTablet}) {
+function UserProfilePage ({theme, isMoblie, isTablet}) {
   const [tabValue, setTabValue] = useState(0);
-  const [isEditing, setIsEditing] = useState(false);
+  const [historyItems, setHistoryItems] = useState([]);
+  const [favoriteItems, setFavoriteItems] = useState([]);
+  const [playlistItems, setPlaylistItems] = useState([]);
+  const [episodeItems, setEpisodeItems] = useState([]);
+  const [myShows, setMyShows] = useState([]);
   const [uploadDialogOpen, setUploadDialogOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isSaving, setIsSaving] = useState(false); // ← loading flag
   // const [anchorEl, setAnchorEl] = useState(null);
   // const [open, setOpen] = useState(false);
 
-  const [userData, setUserData] = useState({
-    name: '',
-    email: '',
-    bio: '',
-    joinDate: '',
-    stats: {
-      listened: 0,
-      favorites: 0,
-      playlists: 0,
-      shows: 0,
-    }
+  const [userData, setUserData] = useState(null);
+  const [tempData, setTempData] = useState({
+    username: "",
+    email: "",
+    bio: "",
+    profile_image: null,
   });
-
-  const [tempData, setTempData] = useState({ ...userData });
-
-  // Sample data for tabs
-  const historyItems = [
-    { id: 1, title: 'The Future of AI', podcast: 'Tech Today', time: '2 days ago' },
-    { id: 2, title: 'Mindfulness Meditation', podcast: 'Wellness Hour', time: '3 days ago' }
-  ];
-
-  const favoriteItems = [
-    { id: 1, title: 'Serial', podcast: 'Serial', episodes: 12 },
-    { id: 2, title: 'The Daily', podcast: 'NY Times', episodes: 356 }
-  ];
-
-  const playlistItems = [
-    { id: 1, name: 'Morning Commute', count: 15 },
-    { id: 2, name: 'Workout Mix', count: 8 }
-  ];
-
-  const episodeItems = [
-    { id: 1, title: 'Episode 42: The Ethics of AI', podcast: 'TechTalk', duration: '48:15' },
-    { id: 2, title: 'Building Sustainable Startups', podcast: 'Business Insights', duration: '38:45' }
-  ];
+  const [imagePreviewUrl, setImagePreviewUrl] = useState("");
+  const [isEditing, setIsEditing] = useState(false);
 
   const handleTabChange = (event, newValue) => {
     setTabValue(newValue);
@@ -94,88 +80,165 @@ function UserProfilePage ({Theme, isMoblie, isTablet}) {
     setUploadDialogOpen(false);
   };
 
-  // const handleAvatarClick = (event) => {
-  //   setAnchorEl(event.currentTarget);
-  //   setOpen(true); // Open the menu
-  // };
-
   const handleEditClick = () => {
     setIsEditing(true);
-    setTempData({ ...userData });
-  };
-
-  const handleSaveClick = () => {
-    setUserData({ ...tempData });
-    setIsEditing(false);
   };
 
   const handleCancelClick = () => {
+    if (userData) {
+      setTempData({
+        username: userData.username || "",
+        email: userData.email || "",
+        bio: userData.bio || "",
+        profile_image: null,
+      });
+      setImagePreviewUrl(userData.profile_image || "");
+    }
     setIsEditing(false);
   };
 
-  // // Handle menu close
-  // const handleMenuClose = () => {
-  //   setOpen(false);
-  // };
-
-  // // Handle sign out (remove token)
-  // const handleSignOut = () => {
-  //   localStorage.removeItem('access_token'); // Remove access token
-  //   setIsLoggedIn(false); // Set login state to false
-  // };
-
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setTempData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    const { username, value } = e.target;
+    setTempData((prev) => ({ ...prev, [username]: value }));
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setTempData((prev) => ({ ...prev, profile_image: file }));
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreviewUrl(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleSaveClick = async () => {
+    if (isSaving) return; // already uploading
+    setIsSaving(true);
+
+    try {
+      const formData = new FormData();
+      formData.append("username", tempData.username);
+      formData.append("email", tempData.email);
+      formData.append("bio", tempData.bio);
+      if (tempData.profile_image) {
+        formData.append("profile_image", tempData.profile_image);
+      }
+      const updated = await updateUserProfile(formData);
+      setUserData(updated);
+      setIsEditing(false);
+      setTempData((prev) => ({ ...prev, profile_image: null }));
+      setImagePreviewUrl(updated.profile_image || "");
+    } catch (err) {
+      console.error("Error saving profile:", err);
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   useEffect(() => {
-    const token = localStorage.getItem("accessToken");
-    if (token) {
-      setIsLoggedIn(true);
-    }
-    const loadUserProfile = async () => {
+    async function loadProfile() {
       try {
-        const profile = await fetchUserProfile();
-        setUserData(profile);
-        setTempData(profile);
-      } catch (error) {
-        console.error("Failed to load user profile:", error);
+        const data = await fetchUserProfile();
+        setUserData(data);
+        setTempData({
+          username: data.username || "",
+          email: data.email || "",
+          bio: data.bio || "",
+          profile_image: null,
+        });
+        setImagePreviewUrl(data.profile_image || "");
+      } catch (err) {
+        console.error("Error loading profile:", err);
       }
-    };
-    loadUserProfile();
-  }, []);
+    }
+    loadProfile();
+    if (tabValue === 0) fetchHistory().then(setHistoryItems);
+    if (tabValue === 1) fetchFavoritesList().then(setFavoriteItems);
+    if (tabValue === 2) fetchPlaylistsList().then(setPlaylistItems);
+    if (tabValue === 3) fetchUserEpisodes().then(setEpisodeItems);
+    if (tabValue === 4) fetchUserPodcasts().then(setMyShows);
+  }, [tabValue]);
+
+  if (!userData) {
+    return <Typography>Loading profile…</Typography>;
+  }
 
   return (
-    <ThemeProvider theme={Theme}>
-      <CssBaseline />
-
+    <>
       {/* File Upload Dialog */}
       <FileUploadDialog
         open={uploadDialogOpen}
         onClose={handleUploadClose}
-        creatorShows={myShows} // Pass the shows data to the dialog
+        creatorShows={myShows}
       />
 
       <Container maxWidth="lg" sx={{ py: 4 }}>
-        {/* Profile Header */}
         <Paper elevation={3} sx={{ p: 4, mb: 4 }}>
-          <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 4 }}>
-            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-              <Avatar alt={userData.name} src="https://randomuser.me/api/portraits/men/32.jpg" sx={{ width: 120, height: 120, mb: 2 }} />
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: { xs: "column", md: "row" },
+              gap: 4,
+            }}
+          >
+            {/* ─── Avatar Area ─── */}
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              {isEditing ? (
+                <>
+                  <label htmlFor="profile-image-upload">
+                    <input
+                      id="profile-image-upload"
+                      type="file"
+                      accept="image/*"
+                      style={{ display: "none" }}
+                      onChange={handleImageChange}
+                    />
+                    <Avatar
+                      alt={tempData.username}
+                      src={imagePreviewUrl || ""}
+                      sx={{
+                        width: 120,
+                        height: 120,
+                        mb: 2,
+                        cursor: "pointer",
+                      }}
+                    >
+                      {!imagePreviewUrl && tempData.username.charAt(0)}
+                    </Avatar>
+                  </label>
+                  <Typography variant="caption" color="text.secondary">
+                    Click avatar to change
+                  </Typography>
+                </>
+              ) : (
+                <Avatar
+                  alt={userData.username}
+                  src={userData.profile_image || ""}
+                  sx={{ width: 120, height: 120, mb: 2 }}
+                >
+                  {!userData.profile_image && userData.username?.charAt(0)}
+                </Avatar>
+              )}
             </Box>
-
+            {/* ─────────────── Profile Fields ─────────────── */}
             <Box sx={{ flexGrow: 1 }}>
               {isEditing ? (
                 <>
                   <TextField
                     fullWidth
                     label="Name"
-                    name="name"
-                    value={tempData.name}
+                    name="username"
+                    value={tempData.username}
                     onChange={handleInputChange}
                     sx={{ mb: 2 }}
                   />
@@ -183,6 +246,7 @@ function UserProfilePage ({Theme, isMoblie, isTablet}) {
                     fullWidth
                     label="Email"
                     name="email"
+                    type="email"
                     value={tempData.email}
                     onChange={handleInputChange}
                     sx={{ mb: 2 }}
@@ -195,12 +259,13 @@ function UserProfilePage ({Theme, isMoblie, isTablet}) {
                     onChange={handleInputChange}
                     multiline
                     rows={3}
+                    sx={{ mb: 2 }}
                   />
                 </>
               ) : (
                 <>
                   <Typography variant="h4" sx={{ fontWeight: 700, mb: 1 }}>
-                    {userData.name}
+                    {userData.username}
                   </Typography>
                   <Typography color="text.secondary" sx={{ mb: 2 }}>
                     {userData.email}
@@ -214,7 +279,7 @@ function UserProfilePage ({Theme, isMoblie, isTablet}) {
                 </>
               )}
 
-              <Box sx={{ display: 'flex', gap: 2, mt: 3 }}>
+              <Box sx={{ display: "flex", gap: 2, mt: 3, flexWrap: "wrap" }}>
                 <Chip label={`${userData.stats.listened} Listened`} />
                 <Chip label={`${userData.stats.favorites} Favorites`} />
                 <Chip label={`${userData.stats.playlists} Playlists`} />
@@ -222,24 +287,44 @@ function UserProfilePage ({Theme, isMoblie, isTablet}) {
               </Box>
             </Box>
 
-            {/* Edit and Save Buttons */}
-            <Box sx={{ display: "flex", justifyContent: "flex-end", alignItems: "flex-end", flexDirection: "column" }}>
+            {/* ─────────────── Edit / Save / Cancel Buttons ─────────────── */}
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "flex-end",
+                alignItems: "flex-end",
+                flexDirection: "column",
+              }}
+            >
               <Button
                 variant="outlined"
                 startIcon={<Edit />}
                 onClick={isEditing ? handleSaveClick : handleEditClick}
-                sx={{ width: '100%' }}
+                sx={{ width: "100%" }}
+                disabled={isSaving} // ← disable while uploading
               >
-                {isEditing ? 'Save Profile' : 'Edit Profile'}
+                {isEditing
+                  ? isSaving
+                    ? "Saving…" // show “Saving…” during upload
+                    : "Save Profile"
+                  : "Edit Profile"}
               </Button>
+
               {isEditing && (
                 <Button
                   variant="text"
                   onClick={handleCancelClick}
-                  sx={{ width: '100%', mt: 1 }}
+                  sx={{ width: "100%", mt: 1 }}
+                  disabled={isSaving}
                 >
                   Cancel
                 </Button>
+              )}
+
+              {isSaving && (
+                <Box sx={{ mt: 2, display: "flex", justifyContent: "center" }}>
+                  <CircularProgress size={24} />
+                </Box>
               )}
             </Box>
           </Box>
@@ -416,7 +501,7 @@ function UserProfilePage ({Theme, isMoblie, isTablet}) {
           </Typography>
         </Container>
       </Container>
-    </ThemeProvider>
+    </>
   );
 };
 

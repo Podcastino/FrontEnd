@@ -20,8 +20,10 @@ import {
   Headphones as HeadphonesIcon,
   Subscriptions as SubscriptionsIcon
 } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
 
 const ProfileMenu = ({ anchorEl, open, onClose, onSignOut, userData }) => {
+  const navigate = useNavigate();
   return (
     <Menu
       anchorEl={anchorEl}
@@ -104,7 +106,7 @@ const ProfileMenu = ({ anchorEl, open, onClose, onSignOut, userData }) => {
       <Divider sx={{ my: 1, borderColor: 'divider' }} />
 
       {/* Menu Items */}
-      <MenuItem onClick={onClose}>
+      <MenuItem onClick={() => {navigate('/profile')}}>
         <ListItemIcon sx={{ color: 'primary.main' }}>
           <DashboardIcon fontSize="small" />
         </ListItemIcon>
@@ -113,7 +115,7 @@ const ProfileMenu = ({ anchorEl, open, onClose, onSignOut, userData }) => {
         </ListItemText>
       </MenuItem>
 
-      <MenuItem onClick={onClose}>
+      {/* <MenuItem onClick={onClose}>
         <ListItemIcon sx={{ color: 'primary.main' }}>
           <MicIcon fontSize="small" />
         </ListItemIcon>
@@ -138,7 +140,7 @@ const ProfileMenu = ({ anchorEl, open, onClose, onSignOut, userData }) => {
         <ListItemText>
           <Typography variant="body2">Listening History</Typography>
         </ListItemText>
-      </MenuItem>
+      </MenuItem> */}
 
       <Divider sx={{ my: 1, borderColor: 'divider' }} />
 
