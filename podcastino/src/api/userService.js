@@ -27,6 +27,7 @@ const saveRefreshToken = (token) => {
 // Builds headers with the current access token (if present)
 const getAuthHeader = () => {
   const token = getStoredAccessToken();
+  console.log(token);
   return {
     "Content-Type": "application/json",
     Authorization: token ? `Bearer ${token}` : "",
@@ -147,12 +148,15 @@ export const fetchUserProfile = async () => {
 };
 
 export const updateUserProfile = async (formData) => {
-  const response = await authFetch(`${API_BASE_URL}/profile/`, {
+  const response = await fetch(`${API_BASE_URL}/profile/`, {
     method: "PUT",
+    headers: {
+      ...getAuthHeader(),
+    },
     body: formData,
   });
   if (!response.ok) {
-    throw new Error("Failed to update user profile");
+    throw new Error("Failed to update profile");
   }
   return await response.json();
 };
@@ -184,6 +188,9 @@ export const removeFavorite = async (favoritePk) => {
     `${API_BASE_URL}/favorites/${favoritePk}/`,
     {
       method: "DELETE",
+      headers: {
+        ...getAuthHeader(),
+      },
     }
   );
   if (!response.ok) throw new Error("Failed to remove favorite");

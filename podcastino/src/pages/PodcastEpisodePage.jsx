@@ -17,8 +17,6 @@ import {
   Paper,
   Chip,
   Stack,
-  ThemeProvider,
-  CssBaseline,
 } from "@mui/material";
 import {
   PlayArrow,
@@ -26,22 +24,21 @@ import {
   Favorite,
   FavoriteBorder,
   Share,
-  MoreVert,
   Message,
   Download,
 } from "@mui/icons-material";
-import LandingService from "./api/LandingService";
+import LandingService from "../api/LandingService";
 import {
   fetchFavoritesList,
   addFavorite,
   removeFavorite,
-} from "./api/userService";
+} from "../api/userService";
 
-function PodcastEpisodePage({ Theme, isMobile, isTablet }) {
+function PodcastEpisodePage({ theme, isMobile, isTablet }) {
   const { id: podcastId } = useParams();
   const [episode, setEpisode] = useState([]);
   const [currentEpisode, setCurrentEpisode] = useState(null);
-  const [favorites, setFavorites] = useState([]);
+  const [favorites, setFavorites] = useState([[]]);
   const [favoriteIds, setFavoriteIds] = useState([]);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
@@ -71,9 +68,10 @@ function PodcastEpisodePage({ Theme, isMobile, isTablet }) {
     const loadFavorites = async () => {
       try {
         const favorites = await fetchFavoritesList();
-        const ids = favorites.map((fav) => fav.id);
-        console.log("Favorite IDs:", ids);
+        const ids = favorites.map((fav) => fav.episode);
+        console.log("Favorite", favorites);
         setFavoriteIds(ids);
+        setFavorites(favorites);
       } catch (error) {
         console.error("Error loading favorites:", error);
       }
@@ -114,7 +112,8 @@ function PodcastEpisodePage({ Theme, isMobile, isTablet }) {
       console.log(epId);
       console.log(favoriteIds);
       if (favoriteIds.includes(epId)) {
-        await removeFavorite(epId);
+        const favoriteId = favorites.find((fav) => (fav.episode === epId)).id;
+        await removeFavorite(favoriteId);
         setFavoriteIds((prev) => prev.filter((id) => id !== epId));
       } else {
         await addFavorite(epId);
@@ -131,8 +130,7 @@ function PodcastEpisodePage({ Theme, isMobile, isTablet }) {
   }
 
   return (
-    <ThemeProvider theme={Theme}>
-      <CssBaseline />
+    <>
       <Container maxWidth="lg" sx={{ py: 4 }}>
         {/* Podcast Header */}
         <Box sx={{ display: "flex", mb: 4 }}>
@@ -411,7 +409,7 @@ function PodcastEpisodePage({ Theme, isMobile, isTablet }) {
           © {new Date().getFullYear()} Podcastino. All rights reserved.
         </Typography>
       </Container>
-    </ThemeProvider>
+    </>
   );
 }
 

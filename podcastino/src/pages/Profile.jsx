@@ -8,9 +8,8 @@ import {
   fetchUserEpisodes,
   fetchUserPodcasts,
   updateUserProfile,   
-} from "./api/userService";
+} from "../api/userService";
 
-import { myShows } from './Data/Mockdata';
 import {
   Avatar,
   Box,
@@ -30,8 +29,7 @@ import {
   Tabs,
   Typography,
   TextField,
-  ThemeProvider,
-  CssBaseline,
+  CircularProgress,
   Grid,
   CardMedia,
   CardActions
@@ -47,7 +45,7 @@ import {
 } from '@mui/icons-material';
 
 
-function UserProfilePage ({Theme, isMoblie, isTablet}) {
+function UserProfilePage ({theme, isMoblie, isTablet}) {
   const [tabValue, setTabValue] = useState(0);
   const [historyItems, setHistoryItems] = useState([]);
   const [favoriteItems, setFavoriteItems] = useState([]);
@@ -56,6 +54,7 @@ function UserProfilePage ({Theme, isMoblie, isTablet}) {
   const [myShows, setMyShows] = useState([]);
   const [uploadDialogOpen, setUploadDialogOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isSaving, setIsSaving] = useState(false); // ← loading flag
   // const [anchorEl, setAnchorEl] = useState(null);
   // const [open, setOpen] = useState(false);
 
@@ -116,6 +115,9 @@ function UserProfilePage ({Theme, isMoblie, isTablet}) {
   };
 
   const handleSaveClick = async () => {
+    if (isSaving) return; // already uploading
+    setIsSaving(true);
+
     try {
       const formData = new FormData();
       formData.append("username", tempData.username);
@@ -124,7 +126,6 @@ function UserProfilePage ({Theme, isMoblie, isTablet}) {
       if (tempData.profile_image) {
         formData.append("profile_image", tempData.profile_image);
       }
-
       const updated = await updateUserProfile(formData);
       setUserData(updated);
       setIsEditing(false);
@@ -132,6 +133,8 @@ function UserProfilePage ({Theme, isMoblie, isTablet}) {
       setImagePreviewUrl(updated.profile_image || "");
     } catch (err) {
       console.error("Error saving profile:", err);
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -164,9 +167,7 @@ function UserProfilePage ({Theme, isMoblie, isTablet}) {
   }
 
   return (
-    <ThemeProvider theme={Theme}>
-      <CssBaseline />
-
+    <>
       {/* File Upload Dialog */}
       <FileUploadDialog
         open={uploadDialogOpen}
@@ -300,17 +301,30 @@ function UserProfilePage ({Theme, isMoblie, isTablet}) {
                 startIcon={<Edit />}
                 onClick={isEditing ? handleSaveClick : handleEditClick}
                 sx={{ width: "100%" }}
+                disabled={isSaving} // ← disable while uploading
               >
-                {isEditing ? "Save Profile" : "Edit Profile"}
+                {isEditing
+                  ? isSaving
+                    ? "Saving…" // show “Saving…” during upload
+                    : "Save Profile"
+                  : "Edit Profile"}
               </Button>
+
               {isEditing && (
                 <Button
                   variant="text"
                   onClick={handleCancelClick}
                   sx={{ width: "100%", mt: 1 }}
+                  disabled={isSaving}
                 >
                   Cancel
                 </Button>
+              )}
+
+              {isSaving && (
+                <Box sx={{ mt: 2, display: "flex", justifyContent: "center" }}>
+                  <CircularProgress size={24} />
+                </Box>
               )}
             </Box>
           </Box>
@@ -487,7 +501,7 @@ function UserProfilePage ({Theme, isMoblie, isTablet}) {
           </Typography>
         </Container>
       </Container>
-    </ThemeProvider>
+    </>
   );
 };
 

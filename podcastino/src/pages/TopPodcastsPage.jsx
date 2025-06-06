@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { shows } from './Data/Mockdata';
+import { useTheme } from '@emotion/react';
 import {
   Box,
   Button,
@@ -12,8 +13,6 @@ import {
   Grid,
   IconButton,
   Typography,
-  ThemeProvider,
-  CssBaseline,
 } from '@mui/material';
 import {
   PlayArrow,
@@ -23,7 +22,8 @@ import {
   People
 } from '@mui/icons-material';
 
-export default function TopShowsPage ({Theme, isMobile, isTablet}) {
+export default function TopPodcastsPage ({ isMobile, isTablet}) {
+  const theme = useTheme();
   const [activeTab, setActiveTab] = useState('weekly');
   
   // Create refs for each section
@@ -77,8 +77,7 @@ export default function TopShowsPage ({Theme, isMobile, isTablet}) {
   ];
 
   return (
-    <ThemeProvider theme={Theme}>
-      <CssBaseline />
+      <>
       <Container maxWidth="xl" sx={{ py: isMobile ? 2 : 4 }}>
         {/* Ranking Sections */}
         {rankingSections.map((section) => (
@@ -101,7 +100,7 @@ export default function TopShowsPage ({Theme, isMobile, isTablet}) {
             }}>
               <IconButton sx={{ 
                 color: 'primary.main',
-                backgroundColor: Theme.palette.primary.main + '20',
+                backgroundColor: theme.palette.primary.main + '20',
                 borderRadius: 2,
                 p: isMobile ? 0.5 : 1
               }}>
@@ -163,7 +162,7 @@ export default function TopShowsPage ({Theme, isMobile, isTablet}) {
                             left: 0,
                             right: 0,
                             bottom: 0,
-                            background: `linear-gradient(180deg, transparent 0%, ${Theme.palette.background.default} 100%)`
+                            background: `linear-gradient(180deg, transparent 0%, ${theme.palette.background.default} 100%)`
                           }
                         }}
                       />
@@ -249,6 +248,6 @@ export default function TopShowsPage ({Theme, isMobile, isTablet}) {
           </Typography>
         </Box>
       </Container>
-    </ThemeProvider>
+    </>
   );
 };

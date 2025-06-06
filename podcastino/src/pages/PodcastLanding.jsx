@@ -3,12 +3,13 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { genres } from "./Data/Mockdata";
-import { fetchPodcasts } from "./api/LandingService";
+import { fetchPodcasts } from "../api/LandingService";
+import { useTheme } from "@emotion/react";
 import {
   fetchSubscriptionsList,
   addSubscription,
   removeSubscription,
-} from "./api/userService";
+} from "../api/userService";
 
 import {
   Box,
@@ -21,8 +22,6 @@ import {
   Grid,
   Stack,
   Typography,
-  ThemeProvider,
-  CssBaseline,
 } from "@mui/material";
 import {
   PlayArrow,
@@ -34,8 +33,10 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-export default function PodcastLanding({ Theme, isMobile, isTablet, isLoggedIn }) {
+export default function PodcastLanding({ isMobile, isTablet }) {
+  const theme = useTheme();
   const navigate = useNavigate();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [topShows, setTopShows] = useState([]);
   const [subscriptionMap, setSubscriptionMap] = useState({});
 
@@ -48,7 +49,8 @@ export default function PodcastLanding({ Theme, isMobile, isTablet, isLoggedIn }
 
   // Load top shows and load subscriptions on mount:
   useEffect(() => {
-    // 1) Load all podcasts, then map to our show shape:
+
+    
     async function LoadAllPodcasts() {
       try {
         const podcasts = await fetchPodcasts();
@@ -66,13 +68,16 @@ export default function PodcastLanding({ Theme, isMobile, isTablet, isLoggedIn }
       }
     }
 
+    const token = localStorage.getItem('accessToken');
+    if (token) {
+      setIsLoggedIn(true);
+    }
     // 2) Load current subscriptions into a map { [podcastId]: subscriptionPk }
     const loadSubscriptions = async () => {
       try {
         const subs = await fetchSubscriptionsList();
         const map = {};
         subs.forEach((s) => {
-          // Assuming each `s` has `{ id, podcast }`
           map[s.podcast] = s.id;
         });
         setSubscriptionMap(map);
@@ -97,7 +102,7 @@ export default function PodcastLanding({ Theme, isMobile, isTablet, isLoggedIn }
     pauseOnHover: true,
     responsive: [
       {
-        breakpoint: Theme.breakpoints.values.md,
+        breakpoint: theme.breakpoints.values.md,
         settings: {
           slidesToShow: 2,
           slidesToScroll: 2,
@@ -105,7 +110,7 @@ export default function PodcastLanding({ Theme, isMobile, isTablet, isLoggedIn }
         },
       },
       {
-        breakpoint: Theme.breakpoints.values.sm,
+        breakpoint: theme.breakpoints.values.sm,
         settings: {
           slidesToShow: 1,
           slidesToScroll: 1,
@@ -142,8 +147,6 @@ export default function PodcastLanding({ Theme, isMobile, isTablet, isLoggedIn }
   };
 
   return (
-    <ThemeProvider theme={Theme}>
-      <CssBaseline />
       <Box sx={{ minHeight: "100vh", bgcolor: "background.default" }}>
         {/* Hero Section */}
         <Box
@@ -153,18 +156,18 @@ export default function PodcastLanding({ Theme, isMobile, isTablet, isLoggedIn }
             position: "relative",
             overflow: "hidden",
             background:
-              Theme.palette.mode === "dark"
+              theme.palette.mode === "dark"
                 ? `linear-gradient(
         -45deg,
-        ${Theme.palette.primary.main}20,
-        ${Theme.palette.secondary.main}20,
-        ${Theme.palette.background.default}
+        ${theme.palette.primary.main}20,
+        ${theme.palette.secondary.main}20,
+        ${theme.palette.background.default}
       )`
                 : `linear-gradient(
         -45deg,
-        ${Theme.palette.primary.light}15,
-        ${Theme.palette.secondary.light}15,
-        ${Theme.palette.background.default}
+        ${theme.palette.primary.light}15,
+        ${theme.palette.secondary.light}15,
+        ${theme.palette.background.default}
       )`,
             "&::before": {
               content: '""',
@@ -176,8 +179,8 @@ export default function PodcastLanding({ Theme, isMobile, isTablet, isLoggedIn }
               background: `linear-gradient(
       45deg,
       transparent 25%,
-      ${Theme.palette.primary.main}${
-                Theme.palette.mode === "dark" ? "10" : "05"
+      ${theme.palette.primary.main}${
+                theme.palette.mode === "dark" ? "10" : "05"
               } 50%,
       transparent 75%
     )`,
@@ -199,16 +202,16 @@ export default function PodcastLanding({ Theme, isMobile, isTablet, isLoggedIn }
                     mb: 3,
                     fontSize: isMobile ? "2rem" : "3rem",
                     background: `linear-gradient(45deg, 
-              ${Theme.palette.primary.main} 30%, 
-              ${Theme.palette.secondary.main} 90%)`,
+              ${theme.palette.primary.main} 30%, 
+              ${theme.palette.secondary.main} 90%)`,
                     WebkitBackgroundClip: "text",
                     WebkitTextFillColor: "transparent",
                     textShadow:
-                      Theme.palette.mode === "dark"
+                      theme.palette.mode === "dark"
                         ? "0 0 20px rgba(103,58,183,0.3)"
                         : "none",
                     animation:
-                      Theme.palette.mode === "dark"
+                      theme.palette.mode === "dark"
                         ? "textGlow 3s ease-in-out infinite alternate"
                         : "none",
                     "@keyframes textGlow": {
@@ -234,8 +237,8 @@ export default function PodcastLanding({ Theme, isMobile, isTablet, isLoggedIn }
                       left: 0,
                       width: "60px",
                       height: "2px",
-                      background: Theme.palette.primary.main,
-                      opacity: Theme.palette.mode === "dark" ? 1 : 0.8,
+                      background: theme.palette.primary.main,
+                      opacity: theme.palette.mode === "dark" ? 1 : 0.8,
                       animation: "lineGrow 1.5s ease-out",
                       "@keyframes lineGrow": {
                         "0%": { width: 0 },
@@ -260,20 +263,20 @@ export default function PodcastLanding({ Theme, isMobile, isTablet, isLoggedIn }
                       sx={{
                         backdropFilter: "blur(10px)",
                         background:
-                          Theme.palette.mode === "dark"
+                          theme.palette.mode === "dark"
                             ? "rgba(103,58,183,0.2)"
                             : "rgba(103,58,183,0.7)",
                         border:
-                          Theme.palette.mode === "dark"
+                          theme.palette.mode === "dark"
                             ? "1px solid rgba(255,255,255,0.1)"
                             : "1px solid rgba(103,58,183,0.2)",
                         transition: "all 0.3s",
                         "&:hover": {
                           transform: "translateY(-2px)",
                           boxShadow:
-                            Theme.palette.mode === "dark"
-                              ? `0 8px 32px ${Theme.palette.primary.main}40`
-                              : `0 8px 32px ${Theme.palette.primary.main}20`,
+                            theme.palette.mode === "dark"
+                              ? `0 8px 32px ${theme.palette.primary.main}40`
+                              : `0 8px 32px ${theme.palette.primary.main}20`,
                         },
                       }}
                     >
@@ -288,20 +291,20 @@ export default function PodcastLanding({ Theme, isMobile, isTablet, isLoggedIn }
                     }}
                     sx={{
                       borderColor:
-                        Theme.palette.mode === "dark"
+                        theme.palette.mode === "dark"
                           ? "rgba(255,255,255,0.2)"
-                          : Theme.palette.divider,
+                          : theme.palette.divider,
                       color: "text.primary",
                       "&:hover": {
-                        borderColor: Theme.palette.primary.main,
+                        borderColor: theme.palette.primary.main,
                         backgroundColor:
-                          Theme.palette.mode === "dark"
-                            ? `${Theme.palette.primary.main}10`
-                            : `${Theme.palette.primary.light}10`,
+                          theme.palette.mode === "dark"
+                            ? `${theme.palette.primary.main}10`
+                            : `${theme.palette.primary.light}10`,
                       },
                     }}
                   >
-                    Browse Shows
+                    Browse Podcasts
                   </Button>
                 </Stack>
               </Grid>
@@ -316,10 +319,10 @@ export default function PodcastLanding({ Theme, isMobile, isTablet, isLoggedIn }
                 position: "absolute",
                 width: 20,
                 height: 20,
-                background: `radial-gradient(${Theme.palette.primary.main}, transparent)`,
+                background: `radial-gradient(${theme.palette.primary.main}, transparent)`,
                 borderRadius: "50%",
                 animation: `float ${15 + index}s linear infinite`,
-                opacity: Theme.palette.mode === "dark" ? 1 : 0.2,
+                opacity: theme.palette.mode === "dark" ? 1 : 0.2,
                 top: `${Math.random() * 100}%`,
                 left: `${Math.random() * 100}%`,
                 "@keyframes float": {
@@ -362,7 +365,7 @@ export default function PodcastLanding({ Theme, isMobile, isTablet, isLoggedIn }
                 transform: "translateX(-50%)",
                 width: "80px",
                 height: "4px",
-                background: `linear-gradient(90deg, ${Theme.palette.primary.main} 0%, ${Theme.palette.secondary.main} 100%)`,
+                background: `linear-gradient(90deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
                 borderRadius: "2px",
               },
             }}
@@ -426,12 +429,12 @@ export default function PodcastLanding({ Theme, isMobile, isTablet, isLoggedIn }
                 transform: "translateX(-50%)",
                 width: "80px",
                 height: "4px",
-                background: `linear-gradient(90deg, ${Theme.palette.primary.main} 0%, ${Theme.palette.secondary.main} 100%)`,
+                background: `linear-gradient(90deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
                 borderRadius: "2px",
               },
             }}
           >
-            Top shows this week
+            Top Podcasts this week
           </Typography>
 
           <Box
@@ -444,7 +447,7 @@ export default function PodcastLanding({ Theme, isMobile, isTablet, isLoggedIn }
                 bottom: isMobile ? -30 : -40,
               },
               "& .slick-dots li button:before": {
-                color: Theme.palette.primary.main,
+                color: theme.palette.primary.main,
               },
               "& .slick-track": {
                 display: "flex",
@@ -467,7 +470,7 @@ export default function PodcastLanding({ Theme, isMobile, isTablet, isLoggedIn }
                   <Box key={show.id} sx={{ padding: isMobile ? 1 : 2, height: "100%" }}>
                     <Card
                       sx={{
-                        background: Theme.palette.background.paper,
+                        background: theme.palette.background.paper,
                         display: "flex",
                         flexDirection: "column",
                         height: "100%",
@@ -587,10 +590,10 @@ export default function PodcastLanding({ Theme, isMobile, isTablet, isLoggedIn }
                 width: "80px",
                 height: "4px",
                 background: `linear-gradient(90deg, 
-          ${Theme.palette.primary.main} 0%, 
-          ${Theme.palette.secondary.main} 100%)`,
+          ${theme.palette.primary.main} 0%, 
+          ${theme.palette.secondary.main} 100%)`,
                 borderRadius: "2px",
-                opacity: Theme.palette.mode === "dark" ? 1 : 0.8,
+                opacity: theme.palette.mode === "dark" ? 1 : 0.8,
               },
             }}
           >
@@ -608,7 +611,7 @@ export default function PodcastLanding({ Theme, isMobile, isTablet, isLoggedIn }
                 alignItems: "stretch",
               },
               "& .slick-dots li button:before": {
-                color: Theme.palette.primary.main,
+                color: theme.palette.primary.main,
               },
               "& .slick-slide": {
                 height: "auto",
@@ -625,14 +628,14 @@ export default function PodcastLanding({ Theme, isMobile, isTablet, isLoggedIn }
                 slidesToScroll: isMobile ? 1 : 2,
                 responsive: [
                   {
-                    breakpoint: Theme.breakpoints.values.lg,
+                    breakpoint: theme.breakpoints.values.lg,
                     settings: {
                       slidesToShow: 3,
                       slidesToScroll: 2,
                     },
                   },
                   {
-                    breakpoint: Theme.breakpoints.values.md,
+                    breakpoint: theme.breakpoints.values.md,
                     settings: {
                       slidesToShow: 2,
                       slidesToScroll: 2,
@@ -640,7 +643,7 @@ export default function PodcastLanding({ Theme, isMobile, isTablet, isLoggedIn }
                     },
                   },
                   {
-                    breakpoint: Theme.breakpoints.values.sm,
+                    breakpoint: theme.breakpoints.values.sm,
                     settings: {
                       slidesToShow: 1,
                       slidesToScroll: 1,
@@ -668,14 +671,14 @@ export default function PodcastLanding({ Theme, isMobile, isTablet, isLoggedIn }
                         display: "flex",
                         flexDirection: "column",
                         transition: "transform 0.2s, box-shadow 0.2s",
-                        background: Theme.palette.background.paper,
-                        border: `1px solid ${Theme.palette.divider}`,
+                        background: theme.palette.background.paper,
+                        border: `1px solid ${theme.palette.divider}`,
                         "&:hover": {
                           transform: "translateY(-8px)",
                           boxShadow:
-                            Theme.palette.mode === "dark"
-                              ? `0 8px 32px ${Theme.palette.primary.main}30`
-                              : `0 8px 24px ${Theme.palette.primary.main}15`,
+                            theme.palette.mode === "dark"
+                              ? `0 8px 32px ${theme.palette.primary.main}30`
+                              : `0 8px 24px ${theme.palette.primary.main}15`,
                         },
                       }}
                     >
@@ -694,14 +697,14 @@ export default function PodcastLanding({ Theme, isMobile, isTablet, isLoggedIn }
                             right: 0,
                             bottom: 0,
                             background: `linear-gradient(45deg, 
-                    ${Theme.palette.primary.main}${
-                              Theme.palette.mode === "dark" ? "30" : "15"
+                    ${theme.palette.primary.main}${
+                              theme.palette.mode === "dark" ? "30" : "15"
                             }, 
-                    ${Theme.palette.secondary.main}${
-                              Theme.palette.mode === "dark" ? "30" : "15"
+                    ${theme.palette.secondary.main}${
+                              theme.palette.mode === "dark" ? "30" : "15"
                             })`,
                             mixBlendMode:
-                              Theme.palette.mode === "dark" ? "soft-light" : "multiply",
+                              theme.palette.mode === "dark" ? "soft-light" : "multiply",
                           },
                         }}
                       />
@@ -710,13 +713,13 @@ export default function PodcastLanding({ Theme, isMobile, isTablet, isLoggedIn }
                           flexGrow: 1,
                           p: isMobile ? 1.5 : 2,
                           background:
-                            Theme.palette.mode === "dark"
+                            theme.palette.mode === "dark"
                               ? `linear-gradient(180deg, 
-                    ${Theme.palette.primary.light}05, 
-                    ${Theme.palette.primary.main}15)`
+                    ${theme.palette.primary.light}05, 
+                    ${theme.palette.primary.main}15)`
                               : `linear-gradient(180deg, 
-                    ${Theme.palette.primary.light}03, 
-                    ${Theme.palette.primary.light}08)`,
+                    ${theme.palette.primary.light}03, 
+                    ${theme.palette.primary.light}08)`,
                         }}
                       >
                         <Typography gutterBottom variant="h6" component="div">
@@ -726,11 +729,11 @@ export default function PodcastLanding({ Theme, isMobile, isTablet, isLoggedIn }
                           <Typography
                             variant="caption"
                             sx={{
-                              background: Theme.palette.action.hover,
+                              background: theme.palette.action.hover,
                               px: 1,
                               borderRadius: 1,
                               color:
-                                Theme.palette.mode === "dark"
+                                theme.palette.mode === "dark"
                                   ? "primary.light"
                                   : "primary.dark",
                             }}
@@ -740,11 +743,11 @@ export default function PodcastLanding({ Theme, isMobile, isTablet, isLoggedIn }
                           <Typography
                             variant="caption"
                             sx={{
-                              background: Theme.palette.action.hover,
+                              background: theme.palette.action.hover,
                               px: 1,
                               borderRadius: 1,
                               color:
-                                Theme.palette.mode === "dark"
+                                theme.palette.mode === "dark"
                                   ? "secondary.light"
                                   : "secondary.dark",
                             }}
@@ -762,7 +765,7 @@ export default function PodcastLanding({ Theme, isMobile, isTablet, isLoggedIn }
                           display: "flex",
                           justifyContent: "space-between",
                           alignItems: "center",
-                          background: Theme.palette.action.selected,
+                          background: theme.palette.action.selected,
                         }}
                       >
                         <Button
@@ -770,12 +773,12 @@ export default function PodcastLanding({ Theme, isMobile, isTablet, isLoggedIn }
                           size="small"
                           sx={{
                             background: `linear-gradient(45deg, 
-                    ${Theme.palette.primary.main} 0%, 
-                    ${Theme.palette.secondary.main} 100%)`,
-                            color: Theme.palette.primary.contrastText,
+                    ${theme.palette.primary.main} 0%, 
+                    ${theme.palette.secondary.main} 100%)`,
+                            color: theme.palette.primary.contrastText,
                             "&:hover": {
                               transform: "scale(1.05)",
-                              boxShadow: `0 4px 12px ${Theme.palette.primary.main}30`,
+                              boxShadow: `0 4px 12px ${theme.palette.primary.main}30`,
                             },
                           }}
                         >
@@ -824,7 +827,7 @@ export default function PodcastLanding({ Theme, isMobile, isTablet, isLoggedIn }
                 transform: "translateX(-50%)",
                 width: "120px",
                 height: "2px",
-                background: `linear-gradient(90deg, transparent 0%, ${Theme.palette.primary.main} 50%, transparent 100%)`,
+                background: `linear-gradient(90deg, transparent 0%, ${theme.palette.primary.main} 50%, transparent 100%)`,
                 opacity: 0.6,
               },
             }}
@@ -841,7 +844,7 @@ export default function PodcastLanding({ Theme, isMobile, isTablet, isLoggedIn }
                     alignItems: "center",
                     p: 2,
                     minHeight: 240,
-                    background: Theme.palette.background.paper,
+                    background: theme.palette.background.paper,
                     backdropFilter: "blur(12px)",
                     border: "1px solid rgba(236, 226, 226, 0.1)",
                     position: "relative",
@@ -849,7 +852,7 @@ export default function PodcastLanding({ Theme, isMobile, isTablet, isLoggedIn }
                     transition: "all 0.3s ease",
                     "&:hover": {
                       transform: "translateY(-4px)",
-                      boxShadow: `0 8px 24px ${Theme.palette.primary.main}20`,
+                      boxShadow: `0 8px 24px ${theme.palette.primary.main}20`,
                     },
                     "&::before": {
                       content: '""',
@@ -859,7 +862,7 @@ export default function PodcastLanding({ Theme, isMobile, isTablet, isLoggedIn }
                       width: "200%",
                       height: "200%",
                       background: `radial-gradient(circle at 50% 50%, 
-              ${Theme.palette.primary.main}10 0%, 
+              ${theme.palette.primary.main}10 0%, 
               transparent 70%)`,
                       animation: "floatEffect 15s infinite linear",
                     },
@@ -896,8 +899,8 @@ export default function PodcastLanding({ Theme, isMobile, isTablet, isLoggedIn }
                         mb: 1,
                         fontWeight: 600,
                         background: `linear-gradient(45deg, 
-                ${Theme.palette.primary.light}, 
-                ${Theme.palette.secondary.light})`,
+                ${theme.palette.primary.light}, 
+                ${theme.palette.secondary.light})`,
                         WebkitBackgroundClip: "text",
                         WebkitTextFillColor: "transparent",
                       }}
@@ -992,6 +995,5 @@ export default function PodcastLanding({ Theme, isMobile, isTablet, isLoggedIn }
           </Typography>
         </Container>
       </Box>
-    </ThemeProvider>
   );
 }

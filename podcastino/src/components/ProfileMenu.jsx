@@ -115,7 +115,7 @@ const ProfileMenu = ({ anchorEl, open, onClose, onSignOut, userData }) => {
         </ListItemText>
       </MenuItem>
 
-      <MenuItem onClick={onClose}>
+      {/* <MenuItem onClick={onClose}>
         <ListItemIcon sx={{ color: 'primary.main' }}>
           <MicIcon fontSize="small" />
         </ListItemIcon>
@@ -140,7 +140,7 @@ const ProfileMenu = ({ anchorEl, open, onClose, onSignOut, userData }) => {
         <ListItemText>
           <Typography variant="body2">Listening History</Typography>
         </ListItemText>
-      </MenuItem>
+      </MenuItem> */}
 
       <Divider sx={{ my: 1, borderColor: 'divider' }} />
 
